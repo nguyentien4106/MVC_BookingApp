@@ -1,10 +1,12 @@
 ﻿using BookingApp.Entities.Base;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BookingApp.Entities
 {
     public class Collaborator : Person
     {
-        public int Code { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]   
+        public int? Code { get; set; }
 
         public int V1 { get; set; }
 
@@ -18,5 +20,7 @@ namespace BookingApp.Entities
 
         public string? School { get; set; }
 
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime? Created { get; set; }
     }
 }

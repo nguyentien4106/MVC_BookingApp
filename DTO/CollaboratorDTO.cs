@@ -39,5 +39,6 @@ namespace BookingApp.DTO
         [Display(Name = "Images")]        
         public List<IFormFile>? UserImages { get; set; } = new List<IFormFile>();
 
+        public DateTime? Created { get; set; }
     }
 }

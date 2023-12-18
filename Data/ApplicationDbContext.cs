@@ -15,5 +15,7 @@ namespace BookingApp.Data
         public DbSet<Collaborator> Collaborators { get; set; }
 
         public DbSet<UserImage> UserImages { get; set; }
+
+        public DbSet<BookingApp.Entities.Service> Services { get; set; }    
     }
 }

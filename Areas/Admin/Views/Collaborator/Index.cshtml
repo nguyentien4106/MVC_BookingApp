@@ -6,16 +6,19 @@
 }
 
 <div class="d-flex justify-content-between">
-    <h1>Danh sách CTV</h1>
+    <h1>Collaborators</h1>
 
     <p>
         <a asp-action="Create" class="btn btn-primary">Create New</a>
     </p>
 </div>
 
-<table class="table">
+<table class="table mt-4">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.FirstName)
             </th>
@@ -52,13 +55,18 @@
             <th>
                 @Html.DisplayNameFor(model => model.School)
             </th>
-            
+            <th>
+                @Html.DisplayNameFor(model => model.Created)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
             </td>
@@ -96,9 +104,12 @@
                 @Html.DisplayFor(modelItem => item.School)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @Html.DisplayFor(modelItem => item.Created)
+            </td>
+            <td>
+                <a class="btn btn-secondary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }

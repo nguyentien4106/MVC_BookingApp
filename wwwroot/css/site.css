@@ -16,3 +16,8 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.img-show{
+    width: 600px;
+    height: auto;
+}

@@ -1,7 +1,13 @@
-﻿namespace BookingApp.Entities.Base
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace BookingApp.Entities.Base
 {
     public class Person
     {
+        [Key]
+        [Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         public string? FirstName { get; set; }
