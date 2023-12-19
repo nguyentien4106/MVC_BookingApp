@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -21,6 +21,10 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Booking\Controllers\" />
+    <Folder Include="Areas\Booking\Data\" />
+    <Folder Include="Areas\Booking\Models\" />
+    <Folder Include="Areas\Booking\Views\" />
     <Folder Include="Data\Migrations\" />
     <Folder Include="Migrations\" />
   </ItemGroup>

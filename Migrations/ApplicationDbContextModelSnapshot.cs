@@ -40,7 +40,7 @@ namespace BookingApp.Migrations
 
                     b.HasIndex("CollaboratorId");
 
-                    b.ToTable("UserImages");
+                    b.ToTable("UserImages", (string)null);
                 });
 
             modelBuilder.Entity("BookingApp.Entities.Collaborator", b =>
@@ -97,7 +97,7 @@ namespace BookingApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Collaborators");
+                    b.ToTable("Collaborators", (string)null);
                 });
 
             modelBuilder.Entity("BookingApp.Entities.Service", b =>
@@ -116,7 +116,7 @@ namespace BookingApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Services");
+                    b.ToTable("Services", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

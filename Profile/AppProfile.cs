@@ -37,7 +37,7 @@ namespace BookingApp.Profile
                 .ForMember(item => item.UserImages, opt => opt.Ignore());
 
             CreateMap<CollaboratorDTO, Collaborator>()
-                .ForMember(item => item.UserImages, opt => opt.ConvertUsing(new FormFileConverter()));
+                .ForMember(item => item.UserImages, opt => opt.Ignore());
         }
     }
 }

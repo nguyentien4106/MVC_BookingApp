@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231218020749_Initial")]
+    [Migration("20231218155957_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,6 +63,10 @@ namespace BookingApp.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("Created")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -96,6 +100,25 @@ namespace BookingApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Collaborators");
+                });
+
+            modelBuilder.Entity("BookingApp.Entities.Service", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Services");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

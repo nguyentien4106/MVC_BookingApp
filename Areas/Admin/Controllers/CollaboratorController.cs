@@ -83,7 +83,7 @@ namespace BookingApp.Areas.Admin.Controllers
                     }
                 }
 
-                _service.Add()
+                _service.Add(collaboratorDTO);
                 return RedirectToAction(nameof(Index));
             }
 

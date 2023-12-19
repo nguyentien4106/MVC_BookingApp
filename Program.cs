@@ -19,7 +19,6 @@ builder.Services
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddAutoMapper(typeof(AppProfile));
-
 builder.Services.AddDependencyInjection();
 
 var app = builder.Build();
