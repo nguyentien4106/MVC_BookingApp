@@ -18,6 +18,6 @@ namespace BookingApp.Data
 
         public DbSet<BookingApp.Entities.Service> Services { get; set; }  
         
-        public DbSet<BookingInformation> BookingInformations { get; set; }
+        //public DbSet<BookingInformation> BookingInformations { get; set; }
     }
 }

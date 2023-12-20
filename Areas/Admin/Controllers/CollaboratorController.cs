@@ -66,23 +66,7 @@ namespace BookingApp.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                var entity = _mapper.Map<CollaboratorDTO, Collaborator>(collaboratorDTO);
-                foreach (var file in collaboratorDTO.UserImages)
-                {
-                    if (file.Length > 0)
-                    {
-                        using (var ms = new MemoryStream())
-                        {
-                            file.CopyTo(ms);
-                            entity.UserImages?.Add(new Entities.Base.UserImage
-                            {
-                                Image = ms.ToArray()
-                            });
-                            // act on the Base64 data
-                        }
-                    }
-                }
-
+                await _service.Add(collaboratorDTO);
                 _service.Add(collaboratorDTO);
                 return RedirectToAction(nameof(Index));
             }
@@ -91,96 +75,81 @@ namespace BookingApp.Areas.Admin.Controllers
         }
 
         //// GET: Admin/Collaborators/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null || _context.Collaborators == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var collaborator = await _context.Collaborators.FindAsync(id);
-        //    if (collaborator == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(collaborator);
-        //}
+        public async Task<IActionResult> Edit(int? id)
+        {
+            var collaborator = await _service.GetById(item => item.Id == id, "UserImages");
+            return View(collaborator);
+        }
 
         //// POST: Admin/Collaborators/Edit/5
         //// To protect from overposting attacks, enable the specific properties you want to bind to.
         //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("V1,V2,V3,Hobbies,School,Id,FirstName,LastName,Title,BirthDate,Description,PhoneNumber,Address")] Collaborator collaborator)
-        //{
-        //    if (id != collaborator.Id)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, CollaboratorDTO collaborator)
+        {
+            if (id != collaborator.Id)
+            {
+                return NotFound();
+            }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(collaborator);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!CollaboratorExists(collaborator.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(collaborator);
-        //}
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _service.Update(collaborator);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    return BadRequest();
+                }
 
-        //// GET: Admin/Collaborators/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null || _context.Collaborators == null)
-        //    {
-        //        return NotFound();
-        //    }
+                return RedirectToAction(nameof(Index));
+            }
 
-        //    var collaborator = await _context.Collaborators
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (collaborator == null)
-        //    {
-        //        return NotFound();
-        //    }
+            return View(collaborator);
+        }
 
-        //    return View(collaborator);
-        //}
+        // GET: Admin/Collaborators/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null || _context.Collaborators == null)
+            {
+                return NotFound();
+            }
 
-        //// POST: Admin/Collaborators/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    if (_context.Collaborators == null)
-        //    {
-        //        return Problem("Entity set 'ApplicationDbContext.Collaborators'  is null.");
-        //    }
-        //    var collaborator = await _context.Collaborators.FindAsync(id);
-        //    if (collaborator != null)
-        //    {
-        //        _context.Collaborators.Remove(collaborator);
-        //    }
+            var collaborator = await _context.Collaborators
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (collaborator == null)
+            {
+                return NotFound();
+            }
 
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
+            return View(collaborator);
+        }
 
-        //private bool CollaboratorExists(int id)
-        //{
-        //  return (_context.Collaborators?.Any(e => e.Id == id)).GetValueOrDefault();
-        //}
+        // POST: Admin/Collaborators/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            if (_context.Collaborators == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Collaborators'  is null.");
+            }
+            var collaborator = await _context.Collaborators.FindAsync(id);
+            if (collaborator != null)
+            {
+                _context.Collaborators.Remove(collaborator);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool CollaboratorExists(int id)
+        {
+            return (_context.Collaborators?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
     }
 }

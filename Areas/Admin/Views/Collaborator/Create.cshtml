@@ -9,7 +9,6 @@
 
 <h1>Create Collaborator</h1>
 <hr />
-<h1>@code</h1>
 <form asp-action="Create" method="post" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
@@ -59,7 +58,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Code" class="control-label"></label>
-                <input asp-for="Code" class="form-control" value="@code" readonly/>
+                <input asp-for="Code" class="form-control" value="1000" readonly/>
                 @*@Html.TextBoxFor(model => model.Code, new { @readonly = true })*@
 
                 <span asp-validation-for="Code" class="text-danger"></span>
@@ -99,8 +98,6 @@
         </div>
     </div>
 </form>
-
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -88,11 +88,13 @@
         </dt>
         <dd class="col-sm-10">
             @{
-                foreach(var image in Model.UserImages)
+                foreach(var file in Model.UserImages)
                 {
-                    // var base64 = Convert.ToBase64String(image.Image);
-                    // var Image = String.Format("data:image/gif;base64,{0}", base64);
-                    // <img src="@Image" alt="" class="img-fluid img-show">
+                    using var memoryStream = new MemoryStream();
+                    file.CopyTo(memoryStream);
+                    var base64 = Convert.ToBase64String(memoryStream.ToArray());
+                    var Image = String.Format("data:image/gif;base64,{0}", base64);
+                    <img src="@Image" alt="" class="img-fluid img-show">
                 }
             }
         </dd>

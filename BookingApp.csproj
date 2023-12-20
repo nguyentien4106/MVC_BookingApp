@@ -25,8 +25,13 @@
     <Folder Include="Areas\Booking\Data\" />
     <Folder Include="Areas\Booking\Models\" />
     <Folder Include="Areas\Booking\Views\" />
+    <Folder Include="ClientApp\src\css\" />
     <Folder Include="Data\Migrations\" />
     <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\admin\index.js" />
   </ItemGroup>
 
 </Project>
