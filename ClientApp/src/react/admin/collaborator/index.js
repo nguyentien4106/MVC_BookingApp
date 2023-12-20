@@ -1,8 +1,11 @@
 ﻿import React from "react";
-import ReactDOM from "react-dom";
-class Welcome extends React.Component {
-    render() {
-        return <h1>Hello World from React boilerplate Hellos 1 1</h1>;
-    }
+import CollaboratorContainer from "./CollaboratorContainer";
+import ReactDOM from "react-dom/client";
+import "../../../css/admin/collaborator/index.scss"
+
+function App () {
+    return <CollaboratorContainer />;
 }
-ReactDOM.render(<Welcome />, document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+root.render(<App />);

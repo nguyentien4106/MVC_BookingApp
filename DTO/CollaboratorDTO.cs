@@ -8,20 +8,16 @@ namespace BookingApp.DTO
 
         public int Code { get; set; }
 
-        [Display(Name = "First Name")]
         public string? FirstName { get; set; }
 
-        [Display(Name = "Last Name")]
         public string? LastName { get; set; }
 
         public string? Title { get; set; }
 
-        [Display(Name = "Birth of Date")]
         public DateTime? BirthDate { get; set; }
 
         public string? Description { get; set; }
 
-        [Display(Name = "Phone Number")]
         public string? PhoneNumber { get; set; }
 
         public string? Address { get; set; }
@@ -36,7 +32,6 @@ namespace BookingApp.DTO
 
         public string? School { get; set; }
 
-        [Display(Name = "Images")]        
         public List<IFormFile>? UserImages { get; set; } = new List<IFormFile>();
 
         public DateTime? Created { get; set; }

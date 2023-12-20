@@ -1,17 +1,12 @@
 const path = require('path');
 const projectRoot = path.resolve(__dirname, '../');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin'); // installed via npm
-const ESLintPlugin = require('eslint-webpack-plugin');
 const adminEntries = require("./untils")
 
 const jsRootPath = path.join(projectRoot, 'wwwroot/js/admin')
 
-const entries = {
-    collaborator: './ClientApp/src/react/admin/collaborator/index'
-}
-
 module.exports = {
-    mode: "development",
+    mode: "production",
     devtool: 'inline-source-map',
     entry: adminEntries,
     output: {
@@ -20,19 +15,12 @@ module.exports = {
        filename: '[name].js'
     },
     module: {
-        rules: [{
-            test: /\.js$|jsx/,
-            exclude: /node_modules/,
-            use: ['babel-loader']
-        },
-        {
-            test: /\.scss$/,
-            use: [
-                'style-loader',
-                'css-loader',
-                'less-loader',
-            ],
-        },
+        rules: [
+            {
+                test: /\.(js|jsx)$/,
+                exclude: /node_modules/,
+                use: ['babel-loader', 'eslint-loader']
+            }
         ]
     },
     watch: true,
@@ -40,7 +28,6 @@ module.exports = {
         ignored: '**/node_modules',
     },
     plugins: [
-        new CleanWebpackPlugin(),
-        // new ESLintPlugin({ cache: false })
+        new CleanWebpackPlugin()
     ],
 };
