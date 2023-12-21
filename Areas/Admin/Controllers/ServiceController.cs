@@ -51,9 +51,33 @@ namespace BookingApp.Areas.Admin.Controllers
         {
             if(id == null)
             {
-                return 
+                return Result.Fail("id null");
             }
-            var result = await _service.Delete(id);
+
+            var result = await _service.Delete((Guid)id);
+
+            return result ? Result.Success() : Result.Fail("Check more");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(ServiceDTO serviceDTO)
+        {
+            var result = await _service.Add(serviceDTO);
+
+            return Result.Success(result);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(Guid? id, ServiceDTO serviceDTO)
+        {
+            if(id == null)
+            {
+                return Result.Fail("id null");
+            }
+
+            var result = await _service.Update(serviceDTO, item => item.Id == id);
+
+            return Result.Success(result);
         }
 
     }

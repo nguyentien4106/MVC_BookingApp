@@ -10,7 +10,6 @@ namespace BookingApp.Models.Result
 
             IsSuccessfully = isSuccessfully;
 
-            Data = data;
         }
 
         public Result() : base(null)
@@ -26,6 +25,5 @@ namespace BookingApp.Models.Result
 
         public bool IsSuccessfully { get; set; }
 
-        public object Data { get; set; }
     }
 }

@@ -10,6 +10,7 @@ namespace BookingApp
         public static IServiceCollection AddDependencyInjection(this IServiceCollection services)
         {
             services.AddScoped<IAppService<Collaborator, CollaboratorDTO>, AppService<Collaborator, CollaboratorDTO>>();
+            services.AddScoped<IAppService<BookingApp.Entities.Service, ServiceDTO>, AppService<BookingApp.Entities.Service, ServiceDTO>>();
 
             return services;
         }

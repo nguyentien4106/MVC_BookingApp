@@ -63,6 +63,8 @@ namespace BookingApp.Profile
                     opt.MapFrom(item => item.UserImages);
                     opt.ConvertUsing(new CollaboratorDTOConverter());
                 });
+
+            CreateMap<BookingApp.Entities.Service, ServiceDTO>().ReverseMap();
         }
     }
 }
