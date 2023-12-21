@@ -2,7 +2,8 @@
     get,
     post,
     put,
-    delete: _delete
+    delete: _delete,
+    getFile
 };
 
 function get(url) {
@@ -10,6 +11,13 @@ function get(url) {
         method: 'GET'
     };
     return fetch(url, requestOptions).then(handleResponse);
+}
+
+function getFile(url){
+    const requestOptions = {
+        method: 'GET'
+    };
+    return fetch(url, requestOptions).then(response => response.blob()).then(data => URL.createObjectURL(data));
 }
 
 function post(url, body) {
@@ -42,7 +50,6 @@ function _delete(url) {
 
 function handleResponse(response) {
     return response.text().then(text => {
-        console.log(text)
         const data = text && JSON.parse(text);
 
         if (!response.ok) {

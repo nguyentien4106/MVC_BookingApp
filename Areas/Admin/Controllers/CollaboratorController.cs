@@ -48,9 +48,21 @@ namespace BookingApp.Areas.Admin.Controllers
 
         public async Task<IActionResult> Get(Guid? id)
         {
-            var result = await _service.GetEntityById(m => m.Id == id, "UserImages");
+            var result = await _service.GetEntityById(m => m.Id == id);
 
             return result == null ? Result.Fail("Null") : Result.Success(result);
+        }
+
+        public async Task<IActionResult> GetUserImages(Guid? id)
+        {
+            if(id == null)
+            {
+                return Result.Fail("id null");
+            }
+
+            var image = await _context.UserImages.FirstOrDefaultAsync(item => item.CollaboratorId == id);
+
+            return image == null ? Result.Fail("image null") : new FileContentResult(image.Image, "image/ipeg");
         }
 
         [HttpPost]
