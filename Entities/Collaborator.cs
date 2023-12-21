@@ -5,8 +5,8 @@ namespace BookingApp.Entities
 {
     public class Collaborator : Person
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]   
-        public int? Code { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]   
+        public int Code { get; set; }
 
         public int V1 { get; set; }
 
@@ -22,5 +22,7 @@ namespace BookingApp.Entities
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? Created { get; set; }
+
+        public List<CollaboratorServices>? CollaboratorServices { get; set; }
     }
 }

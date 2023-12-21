@@ -8,7 +8,7 @@ namespace BookingApp.Entities.Base
         [Key]
         [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public string? FirstName { get; set; }
 

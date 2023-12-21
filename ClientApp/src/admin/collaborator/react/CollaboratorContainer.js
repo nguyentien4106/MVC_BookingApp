@@ -1,14 +1,14 @@
 ﻿import React, { useEffect, useState } from 'react'
-import { service } from '../../service'
+import { service } from '../../../service'
 import DataTable from 'react-data-table-component';
-import { useForm } from 'react-hook-form';
+import { Form } from './Form';
 
 export default function CollaboratorContainer(props) {
     const [collaborators, setCollaborators] = useState([])
+    const [isAdding, setIsAdding] = useState(false)
 
     useEffect(() => {
-        service.get("/Admin/Collaborator/GetAll").then(data => {
-            console.log(data)
+        service.get("/Admin/Collaborator/getall").then(data => {
             setCollaborators(data)
         })
     }, [])
@@ -85,16 +85,19 @@ export default function CollaboratorContainer(props) {
 
     return (
         <div>
-            <div>
-                <button className='btn btn-primary'>Create New</button>
+            <div className='d-flex justify-content-end'>
+                <button className='btn btn-primary' onClick={() => setIsAdding(prev => !prev)}>Create New</button>
             </div>
-            <div className='mask'>
-                <DataTable
-                    columns={columns}
-                    data={collaborators}
-                    pagination
-                />
-            </div>
+            {
+                !isAdding ? <DataTable
+                                columns={columns}
+                                data={collaborators}
+                                pagination
+                                title="Collaborators"
+                                highlightOnHover         
+                                                           
+                            /> : <Form></Form>
+            }
 
         </div>
     )

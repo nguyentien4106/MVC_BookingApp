@@ -4,7 +4,7 @@ namespace BookingApp.DTO
 {
     public class CollaboratorDTO
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public int Code { get; set; }
 

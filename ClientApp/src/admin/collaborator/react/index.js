@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import CollaboratorContainer from "./CollaboratorContainer";
 import ReactDOM from "react-dom/client";
-import "../../../css/admin/collaborator/index.scss"
+import "../css/index.scss"
 
 function App () {
     return <CollaboratorContainer />;

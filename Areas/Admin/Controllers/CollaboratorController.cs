@@ -12,11 +12,13 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using BookingApp.Services.Implement;
 using BookingApp.Service;
+using BookingApp.Models.Result;
 
 namespace BookingApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
+    [AllowAnonymous]
     public class CollaboratorController : Controller
     {
         private readonly AppService<Collaborator, CollaboratorDTO> _service;
@@ -26,6 +28,8 @@ namespace BookingApp.Areas.Admin.Controllers
         public CollaboratorController(IMapper mapper, ApplicationDbContext context)
         {
             _service = new AppService<Collaborator, CollaboratorDTO>(mapper, context);
+            _context = context;
+            _mapper= mapper;
         }
 
         // GET: Admin/Collaborators
@@ -42,128 +46,44 @@ namespace BookingApp.Areas.Admin.Controllers
             return Json(collaborators);
         }
 
-        public async Task<CollaboratorDTO> Get(int? id)
+        public async Task<IActionResult> Get(Guid? id)
         {
-            var result = await _service.GetById(m => m.Id == id, "UserImages");
+            var result = await _service.GetEntityById(m => m.Id == id, "UserImages");
 
-            return result ?? new CollaboratorDTO();
+            return Json(result == null ? Result.Fail("Null") : result);
         }
 
-        //// GET: Admin/Collaborators/Details/5
-        //public async Task<IActionResult> Details(int? id)
+        //public async Task<IActionResult> Get([FromQuery]Guid? id)
         //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        //    var result = await _service.GetEntityById(m => m.Id == id, "UserImages");
 
-        //    var collaborator = await _service.GetById(m => m.Id == id, "UserImages");
-        //    if (collaborator == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(collaborator);
+        //    return Json(result == null ? Result.Fail("Null") : result);
         //}
 
-        //// GET: Admin/Collaborators/Create
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
+        [HttpPost]
+        public async Task<IActionResult> Add(CollaboratorDTO collaboratorDTO)
+        {
+            var result = await _service.Add(collaboratorDTO);
 
-        //// POST: Admin/Collaborators/Create
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create(CollaboratorDTO collaboratorDTO)
-        //{
+            return Json(result == null ? Result.Fail("Result Null") : Result.Success());
+        }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        await _service.Add(collaboratorDTO);
-        //        _service.Add(collaboratorDTO);
-        //        return RedirectToAction(nameof(Index));
-        //    }
+        [HttpPut] 
+        public async Task<IActionResult> Update(Guid? id, CollaboratorDTO collaboratorDTO)
+        {
+            var result = await _service.Update(collaboratorDTO, item => item.Code, item => item.Id == id);    
 
-        //    return View(collaboratorDTO);
-        //}
+            return Json(Result.Success());
+        }
 
-        ////// GET: Admin/Collaborators/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    var collaborator = await _service.GetById(item => item.Id == id, "UserImages");
-        //    return View(collaborator);
-        //}
+        [HttpDelete]
+        public async Task<IActionResult> Delete(Guid? id)
+        {
+            if (id == null) return Json(Result.Fail("Id null"));
 
-        ////// POST: Admin/Collaborators/Edit/5
-        ////// To protect from overposting attacks, enable the specific properties you want to bind to.
-        ////// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, CollaboratorDTO collaborator)
-        //{
-        //    if (id != collaborator.Id)
-        //    {
-        //        return NotFound();
-        //    }
+            var result = await _service.Delete((Guid)id);
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            await _service.Update(collaborator);
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            return BadRequest();
-        //        }
-
-        //        return RedirectToAction(nameof(Index));
-        //    }
-
-        //    return View(collaborator);
-        //}
-
-        //// GET: Admin/Collaborators/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null || _context.Collaborators == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var collaborator = await _context.Collaborators
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (collaborator == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(collaborator);
-        //}
-
-        //// POST: Admin/Collaborators/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    if (_context.Collaborators == null)
-        //    {
-        //        return Problem("Entity set 'ApplicationDbContext.Collaborators'  is null.");
-        //    }
-        //    var collaborator = await _context.Collaborators.FindAsync(id);
-        //    if (collaborator != null)
-        //    {
-        //        _context.Collaborators.Remove(collaborator);
-        //    }
-
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //private bool CollaboratorExists(int id)
-        //{
-        //    return (_context.Collaborators?.Any(e => e.Id == id)).GetValueOrDefault();
-        //}
+            return Json(result ? Result.Success() : Result.Fail("Check more"));
+        }
     }
 }

@@ -70,7 +70,7 @@ namespace BookingApp.Services.Implement
             return _mapper.Map<TDto>(entity);
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<bool> Delete(Guid id)
         {
             var entity = await _dbContext.Set<TModel>().FindAsync(id);
             if (entity == null) return false;
@@ -92,6 +92,29 @@ namespace BookingApp.Services.Implement
             {
                 _dbContext.Entry(entity).Reference(reference).Load();
             }
+        }
+
+        public async Task<TModel> GetEntityById(Expression<Func<TModel, bool>> predicateToGetId, params string[] includes)
+        {
+            var query = ApplyIncludes(_dbContext.Set<TModel>(), includes);
+
+            var entity = await query.FirstOrDefaultAsync(predicateToGetId);
+
+            return entity;
+        }
+
+        public async Task<TDto> Update(TDto dto, Expression<Func<TModel, object>> identity = null, Expression<Func<TModel, bool>>? where = null, params Expression<Func<TModel, object>>[] references)
+        {
+            var entity = await _dbContext.Set<TModel>().FirstOrDefaultAsync(where ?? throw new ArgumentNullException(nameof(where)));
+            _mapper.Map(dto, entity);
+            LoadReferences(entity, references);
+
+            _dbContext.Update(entity);
+            _dbContext.Entry(entity).Property(identity).IsModified = false;
+
+            await _dbContext.SaveChangesAsync();
+
+            return _mapper.Map<TDto>(entity);
         }
     }
 }

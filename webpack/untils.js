@@ -1,5 +1,5 @@
 const adminEntries = {
-    collaborator: './ClientApp/src/react/admin/collaborator/index'
+    collaborator: './ClientApp/src/admin/collaborator/react/index'
 }
 
 module.exports = adminEntries

@@ -52,9 +52,9 @@ namespace BookingApp.Migrations
                 name: "Collaborators",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Code = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<int>(type: "int", nullable: true),
                     V1 = table.Column<int>(type: "int", nullable: false),
                     V2 = table.Column<int>(type: "int", nullable: false),
                     V3 = table.Column<int>(type: "int", nullable: false),
@@ -78,8 +78,7 @@ namespace BookingApp.Migrations
                 name: "Services",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -198,9 +197,8 @@ namespace BookingApp.Migrations
                 name: "UserImages",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CollaboratorId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CollaboratorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Image = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
                 },
                 constraints: table =>
@@ -210,6 +208,31 @@ namespace BookingApp.Migrations
                         name: "FK_UserImages_Collaborators_CollaboratorId",
                         column: x => x.CollaboratorId,
                         principalTable: "Collaborators",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CollaboratorServices",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CollaboratorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ServiceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CollaboratorServices", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CollaboratorServices_Collaborators_CollaboratorId",
+                        column: x => x.CollaboratorId,
+                        principalTable: "Collaborators",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CollaboratorServices_Services_ServiceId",
+                        column: x => x.ServiceId,
+                        principalTable: "Services",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -254,6 +277,16 @@ namespace BookingApp.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CollaboratorServices_CollaboratorId",
+                table: "CollaboratorServices",
+                column: "CollaboratorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CollaboratorServices_ServiceId",
+                table: "CollaboratorServices",
+                column: "ServiceId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserImages_CollaboratorId",
                 table: "UserImages",
                 column: "CollaboratorId");
@@ -277,7 +310,7 @@ namespace BookingApp.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Services");
+                name: "CollaboratorServices");
 
             migrationBuilder.DropTable(
                 name: "UserImages");
@@ -287,6 +320,9 @@ namespace BookingApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Services");
 
             migrationBuilder.DropTable(
                 name: "Collaborators");

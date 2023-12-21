@@ -1,10 +1,15 @@
-﻿namespace BookingApp.Entities.Base
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace BookingApp.Entities.Base
 {
     public class UserImage
     {
-        public int Id { get; set; } 
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; set; } 
 
-        public int CollaboratorId { get; set; }
+        public Guid CollaboratorId { get; set; }
 
         public byte[]? Image { get; set; }
 

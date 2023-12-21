@@ -1,8 +1,13 @@
-﻿namespace BookingApp.Entities
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace BookingApp.Entities
 {
     public class Service
     {
-        public int Id { get; set; } 
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; set; } 
 
         public string? Name { get; set; }
 
