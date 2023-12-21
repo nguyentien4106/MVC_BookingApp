@@ -43,29 +43,22 @@ namespace BookingApp.Areas.Admin.Controllers
         public async Task<IActionResult> GetAll()
         {
             var collaborators = await _service.GetAll();
-            return Json(collaborators);
+            return Result.Success(collaborators);
         }
 
         public async Task<IActionResult> Get(Guid? id)
         {
             var result = await _service.GetEntityById(m => m.Id == id, "UserImages");
 
-            return Json(result == null ? Result.Fail("Null") : result);
+            return result == null ? Result.Fail("Null") : Result.Success(result);
         }
-
-        //public async Task<IActionResult> Get([FromQuery]Guid? id)
-        //{
-        //    var result = await _service.GetEntityById(m => m.Id == id, "UserImages");
-
-        //    return Json(result == null ? Result.Fail("Null") : result);
-        //}
 
         [HttpPost]
         public async Task<IActionResult> Add(CollaboratorDTO collaboratorDTO)
         {
             var result = await _service.Add(collaboratorDTO);
 
-            return Json(result == null ? Result.Fail("Result Null") : Result.Success());
+            return result == null ? Result.Fail("Result Null") : Result.Success();
         }
 
         [HttpPut] 
@@ -73,7 +66,7 @@ namespace BookingApp.Areas.Admin.Controllers
         {
             var result = await _service.Update(collaboratorDTO, item => item.Code, item => item.Id == id);    
 
-            return Json(Result.Success());
+            return Result.Success(result);
         }
 
         [HttpDelete]
@@ -83,7 +76,7 @@ namespace BookingApp.Areas.Admin.Controllers
 
             var result = await _service.Delete((Guid)id);
 
-            return Json(result ? Result.Success() : Result.Fail("Check more"));
+            return result ? Result.Success(result) : Result.Fail("Check more");
         }
     }
 }
