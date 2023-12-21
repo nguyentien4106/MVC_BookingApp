@@ -31,6 +31,8 @@
     "react-data-table-component": "^7.5.4",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.49.2",
+    "react-loading": "^2.0.3",
+    "react-notifications-component": "^4.0.1",
     "styled-components": "^5.0.0",
     "webpack": "^5.89.0",
     "webpack-dev-server": "^4.15.1"

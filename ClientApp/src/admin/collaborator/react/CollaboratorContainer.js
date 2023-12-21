@@ -2,18 +2,37 @@
 import { service } from '../../../service'
 import DataTable from 'react-data-table-component';
 import { Form } from './Form';
+import ReactLoading from 'react-loading';
 
 export default function CollaboratorContainer(props) {
     const [collaborators, setCollaborators] = useState([])
     const [isAdding, setIsAdding] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         service.get("/Admin/Collaborator/getall").then(data => {
             setCollaborators(data)
         })
-    }, [])
+
+    }, [isLoading])
+
+    const handleDelete = id => {
+        setIsLoading(prev => true)
+        service.delete(`/Admin/Collaborator/delete/${id}`).then(data => {
+            setIsLoading(prev => false)
+        })
+    }
+
+    const handleCell = (row) => {
+        console.log(row)
+        return <button onClick={() => handleDelete(row.id)}>Delete</button>
+    }
 
     const columns = [
+        {
+            name: 'Action',
+            cell: (row, index, column, id) => handleCell(row, index, column, id)
+        },
         {
             name: 'Mã',
             selector: row => row.code,
@@ -28,11 +47,15 @@ export default function CollaboratorContainer(props) {
             name: 'Last Name',
             selector: row => row.lastName,
             sortable: true,
+            minWidth: '100px'
+
         },
         {
             name: 'Birth of Date',
             selector: row => row.birthDate,
             sortable: true,
+            minWidth: '150px'
+
         },
         {
             name: 'Description',
@@ -78,13 +101,20 @@ export default function CollaboratorContainer(props) {
             name: 'Joined Date',
             selector: row => row.created,
             sortable: true,
-        },
-
+        }
     ];
 
 
     return (
         <div>
+            {
+                isLoading && <div className='blockUI'>
+                                <div className='blockUI__mask' />
+                                <div className='blockUI__inner'>
+                                    <ReactLoading color='blue' type='spin' height={100} width={100}></ReactLoading>
+                                </div>
+                            </div>
+            }
             <div className='d-flex justify-content-end'>
                 <button className='btn btn-primary' onClick={() => setIsAdding(prev => !prev)}>Create New</button>
             </div>

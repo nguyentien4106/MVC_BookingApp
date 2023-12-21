@@ -1,8 +1,11 @@
 ﻿namespace BookingApp.Entities
 {
-    public class BookingInformation : Collaborator
+    public class BookingInformation
     {
-        public List<Service>? Services { get; set; }
+        public Guid Id { get; set; }
 
+        public Guid CollaboratorId { get; set; }
+
+        public List<Service>? Services { get; set; }
     }
 }

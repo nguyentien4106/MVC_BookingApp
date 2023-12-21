@@ -58,7 +58,7 @@ namespace BookingApp.Areas.Admin.Controllers
         {
             var result = await _service.Add(collaboratorDTO);
 
-            return result == null ? Result.Fail("Result Null") : Result.Success();
+            return result == null ? Result.Fail("Result Null") : Result.Success(collaboratorDTO);
         }
 
         [HttpPut] 
