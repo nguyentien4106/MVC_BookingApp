@@ -20,7 +20,13 @@ builder.Services
 builder.Services.AddControllersWithViews();
 builder.Services.AddAutoMapper(typeof(AppProfile));
 builder.Services.AddDependencyInjection();
-
+builder.Services.AddMvc( setup =>
+{
+    setup.EnableEndpointRouting = false;
+}).AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

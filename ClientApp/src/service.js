@@ -1,4 +1,5 @@
-﻿import JSZip, { forEach } from "jszip";
+﻿import JSZip from "jszip";
+import axios from "axios";
 
 export const service = {
     get,
@@ -8,11 +9,11 @@ export const service = {
     getImages
 };
 
+const config = {
+
+}
 function get(url) {
-    const requestOptions = {
-        method: 'GET'
-    };
-    return fetch(url, requestOptions).then(handleResponse);
+    return axios.get(url, {}).then(res => res.data);
 }
 
 function getImages(url){
@@ -34,12 +35,13 @@ function getImages(url){
 }
 
 function post(url, body) {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-    };
-    return fetch(url, requestOptions).then(handleResponse);
+    const options = {
+        headers: {
+            'Content-Type': 'application/json',
+            "Accept" :"application/json"
+        }
+      }
+    return axios.post(url, JSON.stringify(body), options).then(res => res);
 }
 
 function put(url, body) {
