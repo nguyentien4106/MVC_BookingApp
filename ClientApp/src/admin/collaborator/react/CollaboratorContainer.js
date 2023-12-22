@@ -3,11 +3,12 @@ import { service } from '../../../service'
 import DataTable from 'react-data-table-component';
 import { Form } from './Form';
 import ReactLoading from 'react-loading';
-
+import { handleFiles } from '../../../../helpers/handleImage';
 export default function CollaboratorContainer(props) {
     const [collaborators, setCollaborators] = useState([])
     const [isAdding, setIsAdding] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [images, setImages] = useState(null)
 
     useEffect(() => {
         service.get("/Admin/Collaborator/getall").then(data => {
@@ -23,9 +24,21 @@ export default function CollaboratorContainer(props) {
         })
     }
 
+    const handleEdit = id => {
+        setIsLoading(true)
+        service.getImages(`/Admin/Collaborator/GetUserImages/${id}`).then(imgs => {
+            setImages(imgs)
+            setIsLoading(false)
+        })
+    }
+
     const handleCell = (row) => {
-        console.log(row)
-        return <button onClick={() => handleDelete(row.id)}>Delete</button>
+        return (
+            <div >
+                <button className='btn btn-outline-danger' onClick={() => handleDelete(row.id)}>Delete</button>
+                <button className='btn btn-outline-primary' onClick={() => handleEdit(row.id)}>Edit</button>
+            </div>
+        )
     }
 
     const columns = [
@@ -107,6 +120,9 @@ export default function CollaboratorContainer(props) {
 
     return (
         <div>
+            {
+                images && images.map(item => <img key={`${item}`} height={300}  src={item}></img>)
+            }
             {
                 isLoading && <div className='blockUI'>
                                 <div className='blockUI__mask' />

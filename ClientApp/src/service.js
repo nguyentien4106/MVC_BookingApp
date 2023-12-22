@@ -1,9 +1,11 @@
-﻿export const service = {
+﻿import JSZip, { forEach } from "jszip";
+
+export const service = {
     get,
     post,
     put,
     delete: _delete,
-    getFile
+    getImages
 };
 
 function get(url) {
@@ -13,11 +15,22 @@ function get(url) {
     return fetch(url, requestOptions).then(handleResponse);
 }
 
-function getFile(url){
+function getImages(url){
     const requestOptions = {
         method: 'GET'
     };
-    return fetch(url, requestOptions).then(response => response.blob()).then(data => URL.createObjectURL(data));
+    return fetch(url, requestOptions).then(response => response.blob()).then(async data => {
+        const zip = await JSZip.loadAsync(data)
+        const files = zip.files
+
+        const imageNames = Object.keys(files)
+        const images = []
+        for(var imageName of imageNames){
+            const image = await files[imageName].async("blob")
+            images.push(URL.createObjectURL(image))
+        }
+        return images
+    });
 }
 
 function post(url, body) {
