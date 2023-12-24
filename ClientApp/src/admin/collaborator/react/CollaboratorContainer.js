@@ -2,6 +2,9 @@
 import { service } from '../../../service';
 import DataTable, { createTheme } from 'react-data-table-component';
 import { Form } from './Form';
+import ReactLoading from 'react-loading';
+import { Store } from 'react-notifications-component';
+import axios from 'axios';
 import { Edit, Delete } from '@mui/icons-material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -17,6 +20,13 @@ export default function CollaboratorContainer(props) {
   const [collaborators, setCollaborators] = useState([]);
   const [selectedCode, setSelectedCode] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [collaborator, setCollaborator] = useState(null)
+
+  useEffect(() => {
+        service.get("/Admin/Collaborator/getall").then(response => {
+            setCollaborators(response.Data)
+        })
+  
   // Sample data for testing
   const sampleCollaborators = [
     {
@@ -75,6 +85,7 @@ export default function CollaboratorContainer(props) {
       setCollaborators(data);
     });
   }, []);
+
 
   const columns = [
     {
@@ -171,27 +182,109 @@ export default function CollaboratorContainer(props) {
       },
     },
   };
+const handleDelete = id => {
+        setIsLoading(true)
+        service.delete(`/Admin/Collaborator/delete/${id}`).then(data => {
+            setIsLoading(false)
+            Store.addNotification({
+                title: "Wonderful!",
+                message: "teodosii@react-notifications-component",
+                type: "success",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+            })
+        })
+    }
+
+    const handleEdit = (row) => {
+        setIsAdding(true)
+        setCollaborator(row)
+    }
+
+    const handleCell = (row) => {
+        return (
+            <div >
+                <button className='btn btn-outline-danger' onClick={() => handleDelete(row.id)}>Delete</button>
+                <button className='btn btn-outline-primary' onClick={() => handleEdit(row)}>Edit</button>
+            </div>
+        )
+    }
   const [open, setOpen] = React.useState(false);
   console.log('haha');
   const handleClickOpen = (code) => {
     console.log(code);
     setOpen(true);
   };
+const handleDelete = id => {
+        setIsLoading(true)
+        service.delete(`/Admin/Collaborator/delete/${id}`).then(data => {
+            setIsLoading(false)
+            Store.addNotification({
+                title: "Wonderful!",
+                message: "teodosii@react-notifications-component",
+                type: "success",
+                insert: "top",
+                container: "top-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+            })
+        })
+    }
+
+    const handleEdit = (row) => {
+        setIsAdding(true)
+        setCollaborator(row)
+    }
+
+    const handleCell = (row) => {
+        return (
+            <div >
+                <button className='btn btn-outline-danger' onClick={() => handleDelete(row.id)}>Delete</button>
+                <button className='btn btn-outline-primary' onClick={() => handleEdit(row)}>Edit</button>
+            </div>
+        )
+    }
 
   const handleClose = () => {
     setOpen(false);
   };
   return (
-    <div className="grid-rows-2">
-      <div className="d-flex justify-content-end">
-        <button
-          className="btn btn-primary"
-          onClick={() => setIsAdding((prev) => !prev)}
-        >
-          Create New
-        </button>
-      </div>
-      <div className="table">
+    
+     <div>
+            {
+                isLoading && <div className='blockUI'>
+                                <div className='blockUI__mask' />
+                                <div className='blockUI__inner'>
+                                    <ReactLoading color='blue' type='spin' height={100} width={100}></ReactLoading>
+                                </div>
+                            </div>
+            }
+            <div className='d-flex justify-content-end'>
+                {
+                    !isAdding ?  <button className='btn btn-primary' onClick={() => setIsAdding(prev => !prev)}>Create New</button>
+                            :   <button className='btn btn-primary' onClick={() => setIsAdding(prev => !prev)}>Back</button>
+                }
+            </div>
+            
+
+        </div>
+     {
+                isLoading && <div className='blockUI'>
+                                <div className='blockUI__mask' />
+                                <div className='blockUI__inner'>
+                                    <ReactLoading color='blue' type='spin' height={100} width={100}></ReactLoading>
+                                </div>
+                            </div>
+            }
+            <div className='d-flex justify-content-end'>
+                {
+                    !isAdding ?  <button className='btn btn-primary' onClick={() => setIsAdding(prev => !prev)}>Create New</button>
+                            :   <button className='btn btn-primary' onClick={() => setIsAdding(prev => !prev)}>Back</button>
+                }
+            </div>
+            <div className="table">
         {!isAdding ? (
           <React.Fragment>
             <DataTable
@@ -228,9 +321,14 @@ export default function CollaboratorContainer(props) {
             </Dialog>
           </React.Fragment>
         ) : (
-          <Form></Form>
+          <Form collaborator={collaborator} setIsLoading={setIsLoading}></Form>
         )}
       </div>
+
+     
+      
     </div>
   );
+
+   
 }
