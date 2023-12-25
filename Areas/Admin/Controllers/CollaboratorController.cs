@@ -95,11 +95,16 @@ namespace BookingApp.Areas.Admin.Controllers
         }
 
         [HttpPost] 
-        public async Task<JsonResult> Update([FromBody]CollaboratorDTO collaboratorDTO)
+        public async Task<JsonResult> Update([FromForm]CollaboratorDTO collaboratorDTO)
         {
             if(collaboratorDTO == null)
             {
                 return Json(Result.Fail("Can not get the value"));
+            }
+
+            if(collaboratorDTO.Code == 0)
+            {
+                return Json(Result.Fail("Not bind"));
             }
 
             var result = await _service.Update(collaboratorDTO, item => item.Code, item => item.Id == collaboratorDTO.Id);    

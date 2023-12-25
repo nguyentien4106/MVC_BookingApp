@@ -64,7 +64,7 @@ export default function CollaboratorContainer(props) {
     },
     {
       name: 'Birth of Date',
-      selector: (row) => row.BirthDate.substr(0, 10),
+      selector: (row) => row.BirthDate ? row.BirthDate.substr(0, 10) : "",
       sortable: true,
     },
     {
@@ -133,7 +133,6 @@ export default function CollaboratorContainer(props) {
   };
 
   const handleDelete = (collaborator) => {
-    console.log(collaborator)
     setIsLoading(true)
     service.delete(`/Admin/Collaborator/Delete/${collaborator.Id}`).then((response) => {
       console.log(response)
@@ -167,17 +166,17 @@ export default function CollaboratorContainer(props) {
   return (
     <div>
       {isLoading && (
-        <div className="blockUI">
+         <div className="blockUI">
           <div className="blockUI__mask" />
-          <div className="blockUI__inner">
-            <ReactLoading
-              color="blue"
-              type="spin"
-              height={100}
-              width={100}
-            ></ReactLoading>
-          </div>
-        </div>
+             <div className="blockUI__inner">
+                 <ReactLoading
+                 color="blue"
+                 type="spin"
+                 height={100}
+                 width={100}
+                 ></ReactLoading>
+         </div>
+     </div>
       )}
       <div className="d-flex justify-content-end">
         {!isAdding ? (
@@ -233,7 +232,7 @@ export default function CollaboratorContainer(props) {
             </Dialog>
           </React.Fragment>
         ) : (
-          <Form collaborator={collaborator} setIsLoading={setIsLoading}></Form>
+          <Form collaborator={collaborator} setIsLoading={setIsLoading} setIsAdding={setIsAdding}></Form>
         )}
       </div>
     </div>

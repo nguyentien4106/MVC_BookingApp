@@ -3,12 +3,17 @@ import React, { useEffect, useState } from 'react';
 import { service } from '../../../service';
 import axios from "axios";
 import moment from 'moment';
+import { Store } from 'react-notifications-component';
+import { getFormData, notifyFail, notifySuccess } from '../../../helpers/functionHelper';
 
 export function Form({ collaborator, setIsLoading }) {
   const { register, handleSubmit, formState: { errors }} = useForm({defaultValues: collaborator});
   const isEdit = !!collaborator
   const [images, setImages] = useState([])
   const [params, setParams] = useState(collaborator)
+  const [isSubmit, setIsSubmit] = useState(false)
+  const [imagesUpload, setImagesUpload] = useState([])
+  const [imagesUploadPreview, setImagesUploadPreview] = useState([])
 
   useEffect(() => {
     if(collaborator){
@@ -16,20 +21,49 @@ export function Form({ collaborator, setIsLoading }) {
     }
   }, [])
 
+  console.log(images)
+
   useEffect(() => {
+    if(!isSubmit) {
+      return
+    }
     if(isEdit){
-      service.post(`/Admin/Collaborator/Update`, params).then(rs => console.log(rs))
+      setIsLoading(true)
+      service.post(`/Admin/Collaborator/Update`, getFormData(params)).then(rs => {
+        console.log(rs)
+        setIsLoading(false)
+        notifySuccess(Store, rs.data.Message)
+      })
     }
     else{
-      // axios.post(`/Admin/Collaborator/Create`, JSON.stringify(params), options).then(rs => console.log(rs))
-      
+      console.log('add')
+      setIsLoading(true)
+      service.post(`/Admin/Collaborator/Add`, params).then(rs => {
+        console.log(rs)
+        setIsLoading(false)
+        notifyFail()
+      })
     }
+
   }, [params])
 
+  const onUploadChange = e => { 
+      const {files} = e.target
+      // setImagesUpload(files)
+      console.log(files[0])
+      for(const file of files){
+        setImagesUpload(prev => [...prev, file])
+        setImagesUploadPreview(prev => [...prev, URL.createObjectURL(file)])
+      }
+  }
+
   return (
-    <form onSubmit={handleSubmit(data => setParams(({...params, ...data})))}>
-        <div className='d-flex justify-content-between'>
-          <div className='form-group' width='50%'>
+    <form onSubmit={handleSubmit(data => {
+      setParams(({...params, ...data}))
+      setIsSubmit(true)
+    })}>
+        <div className='d-flex justify-content-between' style={{width: "100%"}}>
+          <div className='form-group' style={{width: "50%"}}>
             <label>First Name</label>
             <input className='form-control' {...register('FirstName', { required: true })} />
             {errors.FirstName && <p className='text-danger'>First name is required.</p>}
@@ -51,13 +85,16 @@ export function Form({ collaborator, setIsLoading }) {
             <input className='form-control'{...register('Hobbies')} />
 
             <label>UserImages</label>
-            <input className='form-control'{...register('UserImages')} type='file' multiple/>
+            <input className='form-control'{...register('UserImages')} type='file' multiple onChange={onUploadChange} accept='image/*'/>
             <hr></hr>
             {
               images && images.map(item => <img key={`${item}`} height={300}  src={item}></img>)
             }
+            {
+              imagesUploadPreview && imagesUploadPreview.map(item => <img key={`${item}`} height={300}  src={item}></img>)
+            }
           </div>
-          <div className='form-group' width='50%'>
+          <div className='form-group' style={{width: "50%"}}>
             <label>Last Name</label>
             <input className='form-control'{...register('LastName', { required: true })} />
             {errors.LastName && <p className='text-danger'>Last name is required.</p>}

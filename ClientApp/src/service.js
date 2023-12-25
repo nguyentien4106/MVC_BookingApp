@@ -9,9 +9,6 @@ export const service = {
     getImages
 };
 
-const config = {
-
-}
 function get(url) {
     return axios.get(url, {}).then(res => res.data);
 }
@@ -35,13 +32,7 @@ function getImages(url){
 }
 
 function post(url, body) {
-    const options = {
-        headers: {
-            'Content-Type': 'application/json',
-            "Accept" :"application/json"
-        }
-      }
-    return axios.post(url, JSON.stringify(body), options).then(res => res);
+    return axios.post(url,body).then(res => res);
 }
 
 function put(url, body) {
