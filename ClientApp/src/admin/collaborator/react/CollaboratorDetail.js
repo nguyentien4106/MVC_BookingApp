@@ -24,41 +24,25 @@ const WidgetWrapper = styled(Box)({
   borderRadius: '0.75rem',
 });
 
-export const CollaboratorDetail = ({ userId, picturePath }) => {
+export const CollaboratorDetail = ({ userId, picturePath, collaborator }) => {
   const [user, setUser] = useState(null);
   const dark = '#E0E0E0';
   const medium = '#858585';
   const main = '#C2C2C2';
-  /* 
-  if (!user) {
-    return null;
-  } */
 
   const {
-    firstName,
-    lastName,
-    address,
-    birthDate,
-    description,
-    phoneNumber,
-    v1,
-    v2,
-    v3,
-    hobbies,
-    school,
-  } = {
-    firstName: 'Nguyen',
-    lastName: 'Thang',
-    birthDate: '1990-01-15',
-    description: 'Description of John',
-    phoneNumber: '123-456-7890',
-    address: '123 Main St',
-    v1: '85',
-    v2: '68',
-    v3: '88',
-    hobbies: 'Reading, Swimming',
-    school: 'University of XYZ',
-  };
+    FirstName,
+    LastName,
+    Address,
+    BirthDate,
+    Description,
+    PhoneNumber,
+    V1,
+    V2,
+    V3,
+    Hobbies,
+    School,
+  } = collaborator
   console.log('Tests');
 
   return (
@@ -79,7 +63,7 @@ export const CollaboratorDetail = ({ userId, picturePath }) => {
                 },
               }}
             >
-              {firstName} {lastName}
+              {FirstName} {LastName}
             </Typography>
             <Typography color={medium}>{'5'} friends</Typography>
           </Box>
@@ -93,19 +77,19 @@ export const CollaboratorDetail = ({ userId, picturePath }) => {
       <Box p="1rem 0" gap="2rem">
         <Box display="flex" alignItems="center" gap="1rem">
           <DateRangeOutlined fontSize="large" sx={{ color: main }} />
-          <Typography color={medium}>{birthDate}</Typography>
+          <Typography color={medium}>{BirthDate}</Typography>
         </Box>
         <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
           <LocationOnOutlined fontSize="large" sx={{ color: main }} />
-          <Typography color={medium}>{address}</Typography>
+          <Typography color={medium}>{Address}</Typography>
         </Box>
         <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
           <PhoneAndroidOutlined fontSize="large" sx={{ color: main }} />
-          <Typography color={medium}>{phoneNumber}</Typography>
+          <Typography color={medium}>{PhoneNumber}</Typography>
         </Box>
         <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
           <SchoolOutlined fontSize="large" sx={{ color: main }} />
-          <Typography color={medium}>{school}</Typography>
+          <Typography color={medium}>{School}</Typography>
         </Box>
       </Box>
 
@@ -116,13 +100,13 @@ export const CollaboratorDetail = ({ userId, picturePath }) => {
         <FlexBetween mb="0.5rem">
           <Typography color={medium}>Description</Typography>
           <Typography color={main} fontWeight="500">
-            {description}
+            {Description}
           </Typography>
         </FlexBetween>
         <FlexBetween>
           <Typography color={medium}>Hobbies</Typography>
           <Typography color={main} fontWeight="500">
-            {hobbies}
+            {Hobbies}
           </Typography>
         </FlexBetween>
       </Box>
