@@ -58,7 +58,7 @@ function _delete(url) {
     const requestOptions = {
         method: 'DELETE'
     };
-    return fetch(url, requestOptions).then(handleResponse);
+    return axios.delete(url, {}).then(res => res.data);
 }
 
 // helper functions

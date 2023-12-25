@@ -17,27 +17,30 @@ import { Box } from '@mui/material';
 
 export default function CollaboratorContainer(props) {
   const [collaborators, setCollaborators] = useState([]);
-  const [selectedCode, setSelectedCode] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
   const [collaborator, setCollaborator] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    service.get('/Admin/Collaborator/getall').then((response) => {
-      console.log(response);
-      setCollaborators(response.Data);
-    });
-  }, []);
-
-  const handleClick = (title) => {
-    console.log(`You clicked me! ${title}`);
+  const customStyles = {
+    rows: {
+      style: {
+        minHeight: '72px', // override the row height
+      },
+    },
+    headCells: {
+      style: {
+        paddingLeft: '8px', // override the cell padding for head cells
+        paddingRight: '8px',
+      },
+    },
+    cells: {
+      style: {
+        paddingLeft: '8px', // override the cell padding for data cells
+        paddingRight: '8px',
+      },
+    },
   };
-
-  useEffect(() => {
-    service.get('/Admin/Collaborator/getall').then((data) => {
-      setCollaborators(data.Data);
-    });
-  }, []);
 
   const columns = [
     {
@@ -62,7 +65,7 @@ export default function CollaboratorContainer(props) {
     },
     {
       name: 'Birth of Date',
-      selector: (row) => row.BirthDate,
+      selector: (row) => row.BirthDate.substr(0, 10),
       sortable: true,
     },
     {
@@ -91,22 +94,22 @@ export default function CollaboratorContainer(props) {
     {
       name: 'Action',
       sortable: false,
-      cell: (row) => [
+      cell: (collaborator) => [
         <i
-          key={row.code}
-          onClick={handleClick.bind(this, row)}
+          key={collaborator.Code}
+          onClick={() => handleEdit(collaborator)}
           style={{ cursor: 'pointer' }}
         >
           <Edit></Edit>
         </i>,
         <i
-          onClick={handleClick.bind(this, row)}
+          onClick={() => handleDelete(collaborator)}
           style={{ cursor: 'pointer' }}
         >
           <Delete></Delete>
         </i>,
         <i
-          onClick={handleClickOpen.bind(this, row)}
+          onClick={handleClickOpen.bind(this, collaborator)}
           style={{ cursor: 'pointer' }}
         >
           <Visibility></Visibility>
@@ -115,36 +118,46 @@ export default function CollaboratorContainer(props) {
     },
   ];
 
-  const customStyles = {
-    rows: {
-      style: {
-        minHeight: '72px', // override the row height
-      },
-    },
-    headCells: {
-      style: {
-        paddingLeft: '8px', // override the cell padding for head cells
-        paddingRight: '8px',
-      },
-    },
-    cells: {
-      style: {
-        paddingLeft: '8px', // override the cell padding for data cells
-        paddingRight: '8px',
-      },
-    },
-  };
+  useEffect(() => {
+    setIsLoading(true)
+    service.get('/Admin/Collaborator/getall').then((response) => {
+      console.log(response);
+      setIsLoading(false)
+      setCollaborators(response.Data);
+    });
+  }, []);
 
-  const [open, setOpen] = useState(false);
-  const handleClickOpen = (row) => {
-    console.log(row);
+  const handleClickOpen = (collaborator) => {
+    console.log(collaborator);
     setOpen(true);
-    setCollaborator(row)
+    setCollaborator(collaborator)
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleDelete = (collaborator) => {
+    console.log(collaborator)
+    setIsLoading(true)
+    service.delete(`/Admin/Collaborator/Delete/${collaborator.Id}`).then((response) => {
+      console.log(response)
+      setIsLoading(false)
+      Store.addNotification({
+        title: response.IsSuccessfully ? 'Success' : "Fail",
+        message: response.IsSuccessfully ? 'Deleted successfully' : 'Fail',
+        type: response.IsSuccessfully ? 'success' : 'danger',
+        insert: 'top',
+        container: 'top-right',
+        animationIn: ['animated', 'fadeIn'],
+        animationOut: ['animated', 'fadeOut'],
+        dismiss: {
+          duration: 3000,
+          onScreen: true,
+        },
+      })
+    })
+  }
+
+  const handleEdit = collaborator => {
+    console.log('edit', collaborator)
+  }
 
   return (
     <div>
@@ -192,7 +205,7 @@ export default function CollaboratorContainer(props) {
 
             <Dialog
               open={open}
-              onClose={handleClose}
+              onClose={() => setOpen(false)}
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
             >
@@ -202,14 +215,13 @@ export default function CollaboratorContainer(props) {
               <DialogContent>
                 <Box>
                   <CollaboratorDetail
-                    code={selectedCode}
                     picturePath={'user.picturePath'}
                     collaborator={collaborator}
                   />
                 </Box>
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleClose} autoFocus>
+                <Button onClick={() => setOpen(false)} autoFocus>
                   Close
                 </Button>
               </DialogActions>

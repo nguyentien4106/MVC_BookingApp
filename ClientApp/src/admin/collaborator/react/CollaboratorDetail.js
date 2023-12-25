@@ -44,9 +44,19 @@ export const CollaboratorDetail = ({ userId, picturePath }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editableUser, setEditableUser] = useState(user);
 
-  useEffect(() => {
-    setEditableUser(user);
-  }, [user]);
+  const {
+    FirstName,
+    LastName,
+    Address,
+    BirthDate,
+    Description,
+    PhoneNumber,
+    V1,
+    V2,
+    V3,
+    Hobbies,
+    School,
+  } = collaborator
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
