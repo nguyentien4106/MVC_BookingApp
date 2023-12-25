@@ -4,7 +4,6 @@ import DataTable, { createTheme } from 'react-data-table-component';
 import { Form } from './Form';
 import ReactLoading from 'react-loading';
 import { Store } from 'react-notifications-component';
-import axios from 'axios';
 import { Edit, Delete } from '@mui/icons-material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -156,7 +155,13 @@ export default function CollaboratorContainer(props) {
   }
 
   const handleEdit = collaborator => {
-    console.log('edit', collaborator)
+    setIsAdding((prev) => !prev)
+    setCollaborator(collaborator)
+  }
+
+  const handleAddNew = () => {
+    setIsAdding((prev) => !prev)
+    setCollaborator(null)
   }
 
   return (
@@ -178,7 +183,7 @@ export default function CollaboratorContainer(props) {
         {!isAdding ? (
           <button
             className="btn btn-primary"
-            onClick={() => setIsAdding((prev) => !prev)}
+            onClick={handleAddNew}
           >
             Create New
           </button>
