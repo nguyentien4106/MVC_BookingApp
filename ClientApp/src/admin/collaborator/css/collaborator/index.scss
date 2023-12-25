@@ -109,3 +109,25 @@ input {
 .materialUIInput {
   background-color: white;
 }
+.blockUI{
+    text-align: center;
+    &__mask{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #333;
+        opacity: 0.5;
+        z-index: 9998;
+    }
+
+    &__inner{
+        text-align: center;
+        position: absolute;
+        width: 100%;
+        top: 45%;
+        left: 50%;
+        z-index: 9999;
+    }
+}

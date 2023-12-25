@@ -51,12 +51,12 @@ namespace BookingApp.Areas.Admin.Controllers
         {
             if(id == null)
             {
-                return Result.Fail("id null");
+                return Json(Result.Fail("id null"));
             }
 
             var result = await _service.Delete((Guid)id);
 
-            return result ? Result.Success() : Result.Fail("Check more");
+            return Json(result ? Result.Success() : Result.Fail("Check more"));
         }
 
         [HttpPost]
@@ -64,7 +64,7 @@ namespace BookingApp.Areas.Admin.Controllers
         {
             var result = await _service.Add(serviceDTO);
 
-            return Result.Success(result);
+            return Json(Result.Success(result));
         }
 
         [HttpPut]
@@ -72,12 +72,12 @@ namespace BookingApp.Areas.Admin.Controllers
         {
             if(id == null)
             {
-                return Result.Fail("id null");
+                return Json(Result.Fail("id null"));
             }
 
             var result = await _service.Update(serviceDTO, item => item.Id == id);
 
-            return Result.Success(result);
+            return Json(Result.Success(result));
         }
 
     }
