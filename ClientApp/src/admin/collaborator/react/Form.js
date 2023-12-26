@@ -38,10 +38,10 @@ export function Form({ collaborator, setIsLoading }) {
     else{
       console.log('add')
       setIsLoading(true)
-      service.post(`/Admin/Collaborator/Add`, params).then(rs => {
+      service.post(`/Admin/Collaborator/Add`, getFormData(params)).then(rs => {
         console.log(rs)
         setIsLoading(false)
-        notifyFail()
+        notifySuccess(Store, rs.data.Message)
       })
     }
 
@@ -84,15 +84,7 @@ export function Form({ collaborator, setIsLoading }) {
             <label>Hobbies</label>
             <input className='form-control'{...register('Hobbies')} />
 
-            <label>UserImages</label>
-            <input className='form-control'{...register('UserImages')} type='file' multiple onChange={onUploadChange} accept='image/*'/>
-            <hr></hr>
-            {
-              images && images.map(item => <img key={`${item}`} height={300}  src={item}></img>)
-            }
-            {
-              imagesUploadPreview && imagesUploadPreview.map(item => <img key={`${item}`} height={300}  src={item}></img>)
-            }
+           
           </div>
           <div className='form-group' style={{width: "50%"}}>
             <label>Last Name</label>
@@ -121,7 +113,19 @@ export function Form({ collaborator, setIsLoading }) {
             <label>School</label>
             <input className='form-control'{...register('School')} />
           </div>
+          <div className='form-group'>
+            <label>UserImages</label>
+            <input className='form-control'{...register('UserImages')} type='file' multiple onChange={onUploadChange} accept='image/*'/>
+            <hr></hr>
+            {
+              images && images.map(item => <img key={`${item}`} height={300}  src={item}></img>)
+            }
+            {
+              imagesUploadPreview && imagesUploadPreview.map(item => <img key={`${item}`} height={300}  src={item}></img>)
+            }
         </div>
+        </div>
+        
         <input type="submit" />
     </form>
   );

@@ -13,6 +13,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { CollaboratorDetail } from './CollaboratorDetail';
 import { Visibility } from '@mui/icons-material';
 import { Box } from '@mui/material';
+import { notifySuccess } from '../../../helpers/functionHelper';
 
 export default function CollaboratorContainer(props) {
   const [collaborators, setCollaborators] = useState([]);
@@ -137,19 +138,20 @@ export default function CollaboratorContainer(props) {
     service.delete(`/Admin/Collaborator/Delete/${collaborator.Id}`).then((response) => {
       console.log(response)
       setIsLoading(false)
-      Store.addNotification({
-        title: response.IsSuccessfully ? 'Success' : "Fail",
-        message: response.IsSuccessfully ? 'Deleted successfully' : 'Fail',
-        type: response.IsSuccessfully ? 'success' : 'danger',
-        insert: 'top',
-        container: 'top-right',
-        animationIn: ['animated', 'fadeIn'],
-        animationOut: ['animated', 'fadeOut'],
-        dismiss: {
-          duration: 3000,
-          onScreen: true,
-        },
-      })
+      notifySuccess(Store, response.Message)
+      // Store.addNotification({
+      //   title: response.IsSuccessfully ? 'Success' : "Fail",
+      //   message: response.IsSuccessfully ? 'Deleted successfully' : 'Fail',
+      //   type: response.IsSuccessfully ? 'success' : 'danger',
+      //   insert: 'top',
+      //   container: 'top-right',
+      //   animationIn: ['animated', 'fadeIn'],
+      //   animationOut: ['animated', 'fadeOut'],
+      //   dismiss: {
+      //     duration: 3000,
+      //     onScreen: true,
+      //   },
+      // })
     })
   }
 

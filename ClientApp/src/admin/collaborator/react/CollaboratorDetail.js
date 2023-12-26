@@ -24,7 +24,7 @@ const WidgetWrapper = styled(Box)({
   borderRadius: '0.75rem',
 });
 
-export const CollaboratorDetail = ({ userId, picturePath }) => {
+export const CollaboratorDetail = ({ userId, picturePath, collaborator }) => {
   const [user, setUser] = useState({
     firstName: 'Nguyen',
     lastName: 'Thang',

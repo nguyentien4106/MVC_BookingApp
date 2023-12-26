@@ -87,7 +87,7 @@ namespace BookingApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(CollaboratorDTO collaboratorDTO)
+        public async Task<IActionResult> Add([FromForm]CollaboratorDTO collaboratorDTO)
         {
             var result = await _service.Add(collaboratorDTO);
 
