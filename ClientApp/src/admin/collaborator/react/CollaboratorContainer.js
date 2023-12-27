@@ -13,7 +13,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { CollaboratorDetail } from './CollaboratorDetail';
 import { Visibility } from '@mui/icons-material';
 import { Box } from '@mui/material';
-import { notify } from '../../../helpers/functionHelper';
+import { notify, notifySuccess } from '../../../helpers/functionHelper';
 
 export default function CollaboratorContainer(props) {
   const [collaborators, setCollaborators] = useState([]);
@@ -136,6 +136,7 @@ export default function CollaboratorContainer(props) {
   const handleDelete = (collaborator) => {
     setIsLoading(true)
     service.delete(`/Admin/Collaborator/Delete/${collaborator.Id}`).then((response) => {
+      console.log(response)
       setIsLoading(false)
       notify(Store, response.IsSuccessfully, response.Message)
     })

@@ -93,14 +93,12 @@ namespace BookingApp.Areas.Admin.Controllers
 
             var entity = _mapper.Map<Collaborator>(collaboratorDTO);
 
-            var isSuccess = true; // await _imageService.RemoveUserImagesById(collaboratorDTO.Id);
-            if (isSuccess)
-            {
-                var result = await _service.Update(collaboratorDTO, item => item.Code, item => item.Id == collaboratorDTO.Id);    
-                return Json(Result.Success(result));
-            }
 
-            return Json(Result.Fail("Something wrong !"));
+            var result = await _service.Update(collaboratorDTO, item => item.Code, item => item.Id == collaboratorDTO.Id);
+            await _imageService.RemoveUserImagesById(collaboratorDTO.Id);
+            await _imageService.AddImageToUser(collaboratorDTO.Id, collaboratorDTO.UserImages);
+            return Json(Result.Success(result));
+
         }
 
         [HttpDelete]

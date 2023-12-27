@@ -13,13 +13,14 @@ export function Form({ collaborator, setIsLoading }) {
   const [params, setParams] = useState(collaborator)
   const [isSubmit, setIsSubmit] = useState(false)
   const [previewImages, setPreviewImages] = useState([])
-  const [birthDate, setBirthDate] = useState(moment(collaborator.BirthDate).format("yyyy-MM-DD"))
+  const birthDateInit = collaborator ? moment(collaborator.BirthDate).format("yyyy-MM-DD") : moment().format("yyyy-MM-DD")
+  const [birthDate, setBirthDate] = useState(birthDateInit)
 
   useEffect(() => {
     if(collaborator){
       service.getImages(`/Admin/Collaborator/GetUserImages/${collaborator.Id}`).then(response => {
         console.log(response)
-        const fileImages = response.map((item, idex) => new File([item.file], `image${idex}.jpeg`))
+        const fileImages = response.map((item, idex) => new File([item], `image${idex}.jpeg`))
         setPreviewImages(prev => [...prev, ...fileImages])
       })
     }
