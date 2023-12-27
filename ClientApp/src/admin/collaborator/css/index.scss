@@ -131,3 +131,13 @@ input {
         z-index: 9999;
     }
 }
+
+.image-preview{
+  position: relative;
+
+  &__remove{
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}

@@ -15,6 +15,7 @@ using BookingApp.Service;
 using BookingApp.Models.Result;
 using System.IO.Compression;
 using BookingApp.Entities.Base;
+using BookingApp.Services;
 
 namespace BookingApp.Areas.Admin.Controllers
 {
@@ -24,13 +25,16 @@ namespace BookingApp.Areas.Admin.Controllers
     public class CollaboratorController : Controller
     {
         private readonly AppService<Collaborator, CollaboratorDTO> _service;
-        private readonly IMapper _mapper;
         private readonly ApplicationDbContext _context;
-        public CollaboratorController(IMapper mapper, ApplicationDbContext context)
+        private readonly IImageService _imageService;
+        private readonly IMapper _mapper;
+
+        public CollaboratorController(IMapper mapper, ApplicationDbContext context, IImageService imageService)
         {
             _service = new AppService<Collaborator, CollaboratorDTO>(mapper, context);
             _context = context;
-            _mapper= mapper;
+            _imageService = imageService;
+            _mapper = mapper;
         }
 
         // GET: Admin/Collaborators
@@ -51,38 +55,18 @@ namespace BookingApp.Areas.Admin.Controllers
         {
             var result = await _service.GetEntityById(m => m.Id == id);
 
-            return Json(result == null ? Result.Fail("Null") : Result.Success(result));
+            return Json(result == null ? Result.Fail("Result null") : Result.Success(result));
         }
 
         public async Task<IActionResult> GetUserImages(Guid? id)
         {
-            // Create a memory stream to hold the zip file contents
-            MemoryStream memoryStream = new();
-
-            // Create a zip archive
-            using (ZipArchive archive = new(memoryStream, ZipArchiveMode.Create, true))
+            if(id == null)
             {
-                // Retrieve images from the database
-                var images = await _context.UserImages.Where(item => item.CollaboratorId == id).ToListAsync();
-
-
-                // Add image files to the archive
-                int i = 0;
-                foreach (var image in images)
-                {
-                    // Assuming your byte[] property is called "ImageData"
-                    var entry = archive.CreateEntry($"image_{i}.jpeg");
-                    using (var entryStream = entry.Open())
-                    {
-                        entryStream.Write(image.Image, 0, image.Image.Length);
-                    }
-                    i++;
-                }
+                return Json(Result.Fail("Id null"));
             }
 
-            memoryStream.Position = 0;
+            var memoryStream = await _imageService.GetUserImagesById((Guid)id);
 
-            // Return the zip file as the response
             return new FileContentResult(memoryStream.ToArray(), "application/zip");
         }
 
@@ -107,9 +91,16 @@ namespace BookingApp.Areas.Admin.Controllers
                 return Json(Result.Fail("Not bind"));
             }
 
-            var result = await _service.Update(collaboratorDTO, item => item.Code, item => item.Id == collaboratorDTO.Id);    
+            var entity = _mapper.Map<Collaborator>(collaboratorDTO);
 
-            return Json(Result.Success(result));
+            var isSuccess = true; // await _imageService.RemoveUserImagesById(collaboratorDTO.Id);
+            if (isSuccess)
+            {
+                var result = await _service.Update(collaboratorDTO, item => item.Code, item => item.Id == collaboratorDTO.Id);    
+                return Json(Result.Success(result));
+            }
+
+            return Json(Result.Fail("Something wrong !"));
         }
 
         [HttpDelete]
@@ -121,40 +112,5 @@ namespace BookingApp.Areas.Admin.Controllers
 
             return Json(result ? Result.Success(result) : Result.Fail("Check more"));
         }
-
-        public async Task<IActionResult> Test(Guid? id)
-        {
-
-            // Create a memory stream to hold the zip file contents
-            MemoryStream memoryStream = new MemoryStream();
-            
-                // Create a zip archive
-                using (ZipArchive archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
-                {
-                    // Retrieve images from the database
-                    var images = await _context.UserImages.Where(item => item.CollaboratorId == id).ToListAsync();
-
-
-                    // Add image files to the archive
-                    int i = 0;
-                    foreach (var image in images)
-                    {
-                        // Assuming your byte[] property is called "ImageData"
-                        var entry = archive.CreateEntry($"image_{i}.jpeg");
-                        using (var entryStream = entry.Open())
-                        {
-                            entryStream.Write(image.Image, 0, image.Image.Length);
-                        }
-                        i++;
-                    }
-                }
-
-            memoryStream.Position = 0;
-
-            // Return the zip file as the response
-            return new FileContentResult(memoryStream.ToArray(), "application/zip");
-            
-        }
-
     }
 }

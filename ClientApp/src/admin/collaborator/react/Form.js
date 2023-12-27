@@ -1,60 +1,83 @@
 import { useForm } from 'react-hook-form';
 import React, { useEffect, useState } from 'react';
 import { service } from '../../../service';
-import axios from "axios";
 import moment from 'moment';
 import { Store } from 'react-notifications-component';
-import { getFormData, notifyFail, notifySuccess } from '../../../helpers/functionHelper';
+import { getFormData, notify } from '../../../helpers/functionHelper';
+import { Delete } from '@mui/icons-material';
+
 
 export function Form({ collaborator, setIsLoading }) {
   const { register, handleSubmit, formState: { errors }} = useForm({defaultValues: collaborator});
   const isEdit = !!collaborator
-  const [images, setImages] = useState([])
   const [params, setParams] = useState(collaborator)
   const [isSubmit, setIsSubmit] = useState(false)
-  const [imagesUpload, setImagesUpload] = useState([])
-  const [imagesUploadPreview, setImagesUploadPreview] = useState([])
+  const [previewImages, setPreviewImages] = useState([])
+  const [birthDate, setBirthDate] = useState(moment(collaborator.BirthDate).format("yyyy-MM-DD"))
 
   useEffect(() => {
     if(collaborator){
-      service.getImages(`/Admin/Collaborator/GetUserImages/${collaborator.Id}`).then(setImages)
+      service.getImages(`/Admin/Collaborator/GetUserImages/${collaborator.Id}`).then(response => {
+        console.log(response)
+        const fileImages = response.map((item, idex) => new File([item.file], `image${idex}.jpeg`))
+        setPreviewImages(prev => [...prev, ...fileImages])
+      })
     }
   }, [])
-
-  console.log(images)
 
   useEffect(() => {
     if(!isSubmit) {
       return
     }
+    console.log(previewImages)
     if(isEdit){
-      setIsLoading(true)
-      service.post(`/Admin/Collaborator/Update`, getFormData(params)).then(rs => {
-        console.log(rs)
-        setIsLoading(false)
-        notifySuccess(Store, rs.data.Message)
-      })
+      update()
     }
     else{
-      console.log('add')
-      setIsLoading(true)
-      service.post(`/Admin/Collaborator/Add`, getFormData(params)).then(rs => {
-        console.log(rs)
-        setIsLoading(false)
-        notifySuccess(Store, rs.data.Message)
-      })
+      add()
     }
 
   }, [params])
 
+  const update = () => {
+    setIsLoading(true)
+    service.post(`/Admin/Collaborator/Update`, getFormData(params, previewImages)).then(rs => {
+      console.log(rs)
+      setIsLoading(false)
+      notify(Store, rs.data.IsSuccessfully, rs.data.Message)
+    })
+  }
+
+  const add = () => {
+    console.log('add')
+    setIsLoading(true)
+    service.post(`/Admin/Collaborator/Add`, getFormData(params, previewImages)).then(rs => {
+      console.log(rs)
+      setIsLoading(false)
+      notify(Store, rs.data.IsSuccessfully, rs.data.Message)
+    })
+  }
+
   const onUploadChange = e => { 
       const {files} = e.target
-      // setImagesUpload(files)
-      console.log(files[0])
+      console.log(files)
       for(const file of files){
-        setImagesUpload(prev => [...prev, file])
-        setImagesUploadPreview(prev => [...prev, URL.createObjectURL(file)])
+        setPreviewImages(prev => [...prev, file])
       }
+  }
+
+  const handleDeleteImagePreview = image => {
+      setPreviewImages(prev => prev.filter(img => img !== image))
+  }
+
+  const renderPreviewImages = () => {
+    return previewImages && previewImages.map((img, index) => {
+      return (
+        <div className='col-3 image' key={index}> 
+          <img height={300} src={URL.createObjectURL(img)} className=''></img>
+          <i onClick={() => handleDeleteImagePreview(img)} style={{ cursor: 'pointer' }}><Delete></Delete></i>
+        </div>
+      )})
   }
 
   return (
@@ -83,8 +106,6 @@ export function Form({ collaborator, setIsLoading }) {
 
             <label>Hobbies</label>
             <input className='form-control'{...register('Hobbies')} />
-
-           
           </div>
           <div className='form-group' style={{width: "50%"}}>
             <label>Last Name</label>
@@ -92,11 +113,14 @@ export function Form({ collaborator, setIsLoading }) {
             {errors.LastName && <p className='text-danger'>Last name is required.</p>}
           
             <label>Birth Date</label>
-            <input className='form-control'{...register('BirthDate', {
-              valueAsDate: true,
-              value: collaborator ? moment(collaborator.BirthDate).toDate() : '',
-            })} defaultValue={new Date().toISOString().substring(0, 10)} type='date'/>
-          
+            <input className='form-control'
+                {...register('BirthDate')} 
+                type='date' 
+                value={birthDate} 
+                onChange={e => {
+                  setBirthDate(moment(e.target.value).format("yyyy-MM-DD"))
+                }}/>
+
             <label>Phone Number</label>
             <input className='form-control'{...register('PhoneNumber', {required: true})} />
             {errors.phoneNumber && <p className='text-danger'>Phone Number is required.</p>}
@@ -118,10 +142,7 @@ export function Form({ collaborator, setIsLoading }) {
             <input className='form-control'{...register('UserImages')} type='file' multiple onChange={onUploadChange} accept='image/*'/>
             <hr></hr>
             {
-              images && images.map(item => <img key={`${item}`} height={300}  src={item}></img>)
-            }
-            {
-              imagesUploadPreview && imagesUploadPreview.map(item => <img key={`${item}`} height={300}  src={item}></img>)
+              renderPreviewImages()
             }
         </div>
         </div>

@@ -24,8 +24,12 @@ function getImages(url){
         const imageNames = Object.keys(files)
         const images = []
         for(var imageName of imageNames){
-            const image = await files[imageName].async("blob")
-            images.push(URL.createObjectURL(image))
+            const img = await files[imageName].async("blob")
+            const f = await files[imageName].async("arraybuffer")
+            images.push({
+                image: URL.createObjectURL(img),
+                file: f
+            })
         }
         return images
     });

@@ -13,6 +13,8 @@ namespace BookingApp.Entities.Base
 
         public byte[]? Image { get; set; }
 
+        public string? Name { get; set; }
+
         public Collaborator? Collaborator { get; set; } 
     }
 }

@@ -1,22 +1,29 @@
-export function getFormData(object) {
+export function getFormData(object, previewImages) {
     const formData = new FormData();
     
     Object.keys(object).forEach(key => {
-        if(Array.isArray(object[key])){
-          for(let i = 0; i < object[key].length; i++) {
-            formData.append(`${key}`, object[key][i])
-          }
-        }
-        else {
-            formData.append(key, object[key])
-        }
-     
+      if(typeof object[key] !== "object"){
+        formData.append(key, object[key])
+      }
     });
+
+    for(const image of previewImages){
+      formData.append('UserImages', image)
+    }
 
     return formData;
 }
 
-export function notifySuccess(Store, message) {
+export function notify(Store, isSuccess, message) {
+  if(isSuccess){
+    notifySuccess(Store, message)
+  }
+  else{
+    notifyFail(Store, message)
+  }
+}
+
+function notifySuccess(Store, message) {
     Store.addNotification({
         title: 'Success',
         message: message,
@@ -32,7 +39,7 @@ export function notifySuccess(Store, message) {
       })
 }
 
-export function notifyFail(Store, message){
+function notifyFail(Store, message){
     Store.addNotification({
         title: 'Fail',
         message: message,

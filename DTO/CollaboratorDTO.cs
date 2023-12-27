@@ -14,7 +14,7 @@ namespace BookingApp.DTO
 
         public string? Title { get; set; }
 
-        public DateTime? BirthDate { get; set; }
+        public string? BirthDate { get; set; }
 
         public string? Description { get; set; }
 
