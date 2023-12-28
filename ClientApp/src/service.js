@@ -33,7 +33,7 @@ function getImages(url){
 }
 
 function post(url, body) {
-    return axios.post(url,body).then(res => res);
+    return axios.post(url,body).then(res => res.data);
 }
 
 function put(url, body) {

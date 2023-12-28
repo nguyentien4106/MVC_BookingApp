@@ -1,40 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using BookingApp.Data;
 using BookingApp.Entities;
 using BookingApp.DTO;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using BookingApp.Services.Implement;
-using BookingApp.Service;
 using BookingApp.Models.Result;
-using System.IO.Compression;
-using BookingApp.Entities.Base;
 using BookingApp.Services;
 
 namespace BookingApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    //[Authorize(Roles = "Admin")]
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
+    //[AllowAnonymous]
     public class CollaboratorController : Controller
     {
         private readonly AppService<Collaborator, CollaboratorDTO> _service;
-        private readonly ApplicationDbContext _context;
         private readonly IImageService _imageService;
-        private readonly IMapper _mapper;
 
         public CollaboratorController(IMapper mapper, ApplicationDbContext context, IImageService imageService)
         {
             _service = new AppService<Collaborator, CollaboratorDTO>(mapper, context);
-            _context = context;
             _imageService = imageService;
-            _mapper = mapper;
         }
 
         // GET: Admin/Collaborators
@@ -90,9 +77,6 @@ namespace BookingApp.Areas.Admin.Controllers
             {
                 return Json(Result.Fail("Collaborator is 000000000."));
             }
-
-            var entity = _mapper.Map<Collaborator>(collaboratorDTO);
-
 
             var result = await _service.Update(collaboratorDTO, identity: item => item.Code, item => item.Id == collaboratorDTO.Id);
             await _imageService.RemoveUserImagesById(collaboratorDTO.Id);

@@ -19,9 +19,7 @@ export function Form({ collaborator, setIsLoading }) {
   useEffect(() => {
     if(collaborator){
       service.getImages(`/Admin/Collaborator/GetUserImages/${collaborator.Id}`).then(response => {
-        console.log(response)
         const fileImages = response.map((item, idex) => new File([item], `image${idex}.jpeg`))
-        console.log(fileImages)
         setPreviewImages(prev => [...prev, ...fileImages])
       })
     }
@@ -31,38 +29,28 @@ export function Form({ collaborator, setIsLoading }) {
     if(!isSubmit) {
       return
     }
-
-    if(isEdit){
-      update()
-    }
-    else{
-      add()
-    }
+    isEdit ? update() : add()
 
   }, [params])
 
   const update = () => {
     setIsLoading(true)
     service.post(`/Admin/Collaborator/Update`, getFormData(params, previewImages)).then(rs => {
-      console.log(rs)
       setIsLoading(false)
-      notify(Store, rs.data.IsSuccessfully, rs.data.Message)
+      notify(Store, rs.IsSuccessfully, rs.Message)
     })
   }
 
   const add = () => {
-    console.log('add')
     setIsLoading(true)
     service.post(`/Admin/Collaborator/Add`, getFormData(params, previewImages)).then(rs => {
-      console.log(rs)
       setIsLoading(false)
-      notify(Store, rs.data.IsSuccessfully, rs.data.Message)
+      notify(Store, rs.IsSuccessfully, rs.Message)
     })
   }
 
   const onUploadChange = e => { 
       const {files} = e.target
-      console.log(files)
       for(const file of files){
         setPreviewImages(prev => [...prev, file])
       }
@@ -74,16 +62,16 @@ export function Form({ collaborator, setIsLoading }) {
 
   const renderPreviewImages = () => {
     return previewImages && <div width="100%" className='images-preview'>
-      {
-        previewImages.map((img, index) => {
-          return (
-            <div className='image-preview' key={index}> 
-              <img width={250} src={URL.createObjectURL(img)}></img>
-              <i onClick={() => handleDeleteImagePreview(img)} className='pointer image-preview__remove'><Delete></Delete></i>
-            </div>
-          )})
-      }
-    </div>
+                              {
+                                previewImages.map((img, index) => {
+                                  return (
+                                    <div className='image-preview' key={index}> 
+                                      <img width={250} src={URL.createObjectURL(img)}></img>
+                                      <i onClick={() => handleDeleteImagePreview(img)} className='pointer image-preview__remove'><Delete></Delete></i>
+                                    </div>
+                                  )})
+                              }
+                            </div>
   }
 
   return (

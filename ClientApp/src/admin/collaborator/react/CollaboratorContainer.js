@@ -137,9 +137,12 @@ export default function CollaboratorContainer(props) {
   const handleDelete = (collaborator) => {
     setIsLoading(true)
     service.delete(`/Admin/Collaborator/Delete/${collaborator.Id}`).then((response) => {
-      console.log(response)
       setIsLoading(false)
       notify(Store, response.IsSuccessfully, response.Message)
+      
+      if(response.IsSuccessfully){
+        setCollaborators(prev => prev.filter(item => item.Id !== collaborator.Id))
+      }
     })
   }
 
