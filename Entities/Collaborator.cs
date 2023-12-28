@@ -24,5 +24,8 @@ namespace BookingApp.Entities
         public DateTime? Created { get; set; }
 
         public List<CollaboratorServices>? CollaboratorServices { get; set; }
+
+        public BookingInformation? BookingInformation { get; set; }
+
     }
 }

@@ -2,46 +2,36 @@
 import { service } from '../../../service';
 import DataTable from 'react-data-table-component';
 import { Form } from './Form';
-import ReactLoading from 'react-loading';
 import { Store } from 'react-notifications-component';
 import { Edit, Delete } from '@mui/icons-material';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import { CollaboratorDetail } from './CollaboratorDetail';
-import { Visibility } from '@mui/icons-material';
-import { Box } from '@mui/material';
 import { notify } from '../../../helpers/functionHelper';
 import Loading from '../../../components/Loading';
+
+const customStyles = {
+  rows: {
+    style: {
+      minHeight: '72px', // override the row height
+    },
+  },
+  headCells: {
+    style: {
+      paddingLeft: '8px', // override the cell padding for head cells
+      paddingRight: '8px',
+    },
+  },
+  cells: {
+    style: {
+      paddingLeft: '8px', // override the cell padding for data cells
+      paddingRight: '8px',
+    },
+  },
+};
 
 export default function CollaboratorContainer(props) {
   const [collaborators, setCollaborators] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
   const [collaborator, setCollaborator] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [open, setOpen] = useState(false);
-
-  const customStyles = {
-    rows: {
-      style: {
-        minHeight: '72px', // override the row height
-      },
-    },
-    headCells: {
-      style: {
-        paddingLeft: '8px', // override the cell padding for head cells
-        paddingRight: '8px',
-      },
-    },
-    cells: {
-      style: {
-        paddingLeft: '8px', // override the cell padding for data cells
-        paddingRight: '8px',
-      },
-    },
-  };
 
   const columns = [
     {
@@ -128,18 +118,12 @@ export default function CollaboratorContainer(props) {
     });
   }, []);
 
-  const handleClickOpen = (collaborator) => {
-    console.log(collaborator);
-    setOpen(true);
-    setCollaborator(collaborator)
-  };
-
   const handleDelete = (collaborator) => {
     setIsLoading(true)
     service.delete(`/Admin/Collaborator/Delete/${collaborator.Id}`).then((response) => {
       setIsLoading(false)
       notify(Store, response.IsSuccessfully, response.Message)
-      
+
       if(response.IsSuccessfully){
         setCollaborators(prev => prev.filter(item => item.Id !== collaborator.Id))
       }
@@ -175,7 +159,8 @@ export default function CollaboratorContainer(props) {
                         pagination
                         title="Collaborators"
                         highlightOnHover
-                        customStyles={customStyles}/> 
+                        // customStyles={customStyles}
+                      /> 
                       : <Form collaborator={collaborator} setIsLoading={setIsLoading} setIsAdding={setIsAdding}></Form>
         }
       </div>

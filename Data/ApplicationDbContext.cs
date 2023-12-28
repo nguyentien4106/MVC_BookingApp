@@ -20,6 +20,6 @@ namespace BookingApp.Data
 
         public DbSet<CollaboratorServices> CollaboratorServices { get; set; }
         
-        //public DbSet<BookingInformation> BookingInformations { get; set; }
+        public DbSet<BookingInformation> BookingInformations { get; set; }
     }
 }

@@ -35,5 +35,17 @@ namespace BookingApp.DTO
         public List<IFormFile>? UserImages { get; set; } = new List<IFormFile>();
 
         public DateTime? Created { get; set; }
+
+        public List<ServiceDTO>? Services { get; set; } = new List<ServiceDTO>();
+
+        public double? Price { get; set; }
+
+        public string? DisplayName { get; set; }
+
+        public bool? IsVeryfied { get; set; }
+
+        public int? Status { get; set; }
+
+        public string? Information { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BookingApp.DTO;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BookingApp.Entities
@@ -11,6 +12,13 @@ namespace BookingApp.Entities
 
         public string? Name { get; set; }
 
+        public double? Price { get; set; }
+
         public string? Description { get; set; }
+
+        public static explicit operator Service(ServiceDTO v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -5,7 +5,7 @@ import moment from 'moment';
 import { Store } from 'react-notifications-component';
 import { getFormData, notify } from '../../../helpers/functionHelper';
 import { Delete } from '@mui/icons-material';
-
+import DropdownCheckList from '../../../components/DropdownCheckList';
 
 export function Form({ collaborator, setIsLoading }) {
   const { register, handleSubmit, formState: { errors }} = useForm({defaultValues: collaborator});
@@ -15,6 +15,9 @@ export function Form({ collaborator, setIsLoading }) {
   const [previewImages, setPreviewImages] = useState([])
   const birthDateInit = collaborator ? moment(collaborator.BirthDate).format("yyyy-MM-DD") : moment().format("yyyy-MM-DD")
   const [birthDate, setBirthDate] = useState(birthDateInit)
+  const [services, setServices] = useState([])
+
+  console.log(collaborator)
 
   useEffect(() => {
     if(collaborator){
@@ -74,12 +77,23 @@ export function Form({ collaborator, setIsLoading }) {
                             </div>
   }
 
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    console.log(value)
+    setServices(
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
+
   return (
     <form onSubmit={handleSubmit(data => {
       setParams(({...params, ...data}))
       setIsSubmit(true)
     })}>
         <div style={{width: "100%"}}>
+          <h2>General Information</h2>
           <div className='form-group d-flex flex-gap' style={{width: "50%"}}>
               <div className='col-6'>
                 <label>First Name</label>
@@ -142,6 +156,34 @@ export function Form({ collaborator, setIsLoading }) {
                   renderPreviewImages()
                 }
               </div>
+          </div>
+          <h2>Booking Information</h2>
+          <div className='form-group d-flex flex-gap' style={{width: "50%"}}>
+            <div className='col-12'>
+                <label>Display Name</label>
+                <input className='form-control' {...register('DisplayName', { required: true })} />
+                {errors.DisplayName && <p className='text-danger'>Display Name is required.</p>}
+
+                <label>Information</label>
+                <input className='form-control'{...register('Information')} />
+
+            </div>
+            <div className='col-12'>
+                <label>Price</label>
+                <input className='form-control'{...register('Price')}/>
+                {errors.Price && <p className='text-danger'>Price is required.</p>}
+
+                <label>Services</label>
+                <DropdownCheckList names={["Cafe", "LoL", "Valorant"]} handleChange={handleChange} currentValue={services}></DropdownCheckList>
+
+                <label>Status</label>
+                <select className='form-control' name="status" id="status" {...register('Status')}>
+                  <option value="0">Not Ready</option>
+                  <option value="1" defaultValue>Ready </option>
+                  <option value="2">Leave</option>
+                  <option value="3">Coming soon</option>
+                </select>
+            </div>
           </div>
         </div>
         

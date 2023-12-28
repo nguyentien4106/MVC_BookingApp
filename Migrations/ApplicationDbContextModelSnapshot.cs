@@ -34,11 +34,46 @@ namespace BookingApp.Migrations
                     b.Property<byte[]>("Image")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CollaboratorId");
 
                     b.ToTable("UserImages");
+                });
+
+            modelBuilder.Entity("BookingApp.Entities.BookingInformation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CollaboratorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Information")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsVeryfied")
+                        .HasColumnType("bit");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CollaboratorId")
+                        .IsUnique();
+
+                    b.ToTable("BookingInformations");
                 });
 
             modelBuilder.Entity("BookingApp.Entities.Collaborator", b =>
@@ -55,8 +90,7 @@ namespace BookingApp.Migrations
 
                     b.Property<int>("Code")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Code"), 1L, 1);
 
@@ -126,13 +160,21 @@ namespace BookingApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("BookingInformationId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("BookingInformationId");
 
                     b.ToTable("Services");
                 });
@@ -350,6 +392,15 @@ namespace BookingApp.Migrations
                     b.Navigation("Collaborator");
                 });
 
+            modelBuilder.Entity("BookingApp.Entities.BookingInformation", b =>
+                {
+                    b.HasOne("BookingApp.Entities.Collaborator", null)
+                        .WithOne("BookingInformation")
+                        .HasForeignKey("BookingApp.Entities.BookingInformation", "CollaboratorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("BookingApp.Entities.CollaboratorServices", b =>
                 {
                     b.HasOne("BookingApp.Entities.Collaborator", "Collaborator")
@@ -367,6 +418,13 @@ namespace BookingApp.Migrations
                     b.Navigation("Collaborator");
 
                     b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("BookingApp.Entities.Service", b =>
+                {
+                    b.HasOne("BookingApp.Entities.BookingInformation", null)
+                        .WithMany("Services")
+                        .HasForeignKey("BookingInformationId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -420,8 +478,15 @@ namespace BookingApp.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("BookingApp.Entities.BookingInformation", b =>
+                {
+                    b.Navigation("Services");
+                });
+
             modelBuilder.Entity("BookingApp.Entities.Collaborator", b =>
                 {
+                    b.Navigation("BookingInformation");
+
                     b.Navigation("CollaboratorServices");
 
                     b.Navigation("UserImages");

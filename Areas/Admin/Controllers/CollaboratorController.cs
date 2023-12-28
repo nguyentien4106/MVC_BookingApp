@@ -7,27 +7,31 @@ using Microsoft.AspNetCore.Authorization;
 using BookingApp.Services.Implement;
 using BookingApp.Models.Result;
 using BookingApp.Services;
+using BookingApp.Entities.Base;
 
 namespace BookingApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
-    //[AllowAnonymous]
+    //[Authorize(Roles = "Admin")]
+    [AllowAnonymous]
     public class CollaboratorController : Controller
     {
         private readonly AppService<Collaborator, CollaboratorDTO> _service;
         private readonly IImageService _imageService;
+        private readonly IMapper _mapper;
 
         public CollaboratorController(IMapper mapper, ApplicationDbContext context, IImageService imageService)
         {
             _service = new AppService<Collaborator, CollaboratorDTO>(mapper, context);
             _imageService = imageService;
+            _mapper = mapper;
         }
 
         // GET: Admin/Collaborators
         public async Task<IActionResult> Index()
         {
             var collaborators = await _service.GetAll();
+
             return View(collaborators);
         }
 
