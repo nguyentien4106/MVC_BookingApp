@@ -14,6 +14,7 @@ import { CollaboratorDetail } from './CollaboratorDetail';
 import { Visibility } from '@mui/icons-material';
 import { Box } from '@mui/material';
 import { notify } from '../../../helpers/functionHelper';
+import Loading from '../../../components/Loading';
 
 export default function CollaboratorContainer(props) {
   const [collaborators, setCollaborators] = useState([]);
@@ -48,8 +49,8 @@ export default function CollaboratorContainer(props) {
       selector: (row) => row.Code,
       sortable: true,
       cell: (row) => (
-        <a href="https://google.com" target="_blank" className="dlink">
-          {row.Code}
+        <a href='#' className="dlink pointer cursor" onClick={() => { setCollaborator(row); setIsAdding(prev => !prev) }}>
+          {row.Code + 10000}
         </a>
       ),
     },
@@ -108,12 +109,12 @@ export default function CollaboratorContainer(props) {
         >
           <Delete></Delete>
         </i>,
-        <i
-          onClick={handleClickOpen.bind(this, collaborator)}
-          style={{ cursor: 'pointer' }}
-        >
-          <Visibility></Visibility>
-        </i>,
+        // <i
+        //   onClick={handleClickOpen.bind(this, collaborator)}
+        //   style={{ cursor: 'pointer' }}
+        // >
+        //   <Visibility></Visibility>
+        // </i>,
       ],
     },
   ];
@@ -154,75 +155,26 @@ export default function CollaboratorContainer(props) {
 
   return (
     <div>
-      {isLoading && (
-         <div className="blockUI">
-          <div className="blockUI__mask" />
-             <div className="blockUI__inner">
-                 <ReactLoading
-                 color="blue"
-                 type="spin"
-                 height={100}
-                 width={100}
-                 ></ReactLoading>
-         </div>
-     </div>
-      )}
+      {
+        isLoading && <Loading />
+      }
       <div className="d-flex justify-content-end">
-        {!isAdding ? (
-          <button
-            className="btn btn-primary"
-            onClick={handleAddNew}
-          >
-            Create New
-          </button>
-        ) : (
-          <button
-            className="btn btn-primary"
-            onClick={() => setIsAdding((prev) => !prev)}
-          >
-            Back
-          </button>
-        )}
+        {
+          !isAdding ? <button className="btn btn-primary" onClick={handleAddNew}>Create New</button> : 
+                      <button className="btn btn-primary" onClick={() => setIsAdding((prev) => !prev)}>Back</button>
+        }
       </div>
       <div className="table">
-        {!isAdding ? (
-          <React.Fragment>
-            <DataTable
-              columns={columns}
-              data={collaborators}
-              pagination
-              title="Collaborators"
-              highlightOnHover
-              customStyles={customStyles}
-            />
-
-            <Dialog
-              open={open}
-              onClose={() => setOpen(false)}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">
-                {'Personal Information'}
-              </DialogTitle>
-              <DialogContent>
-                <Box>
-                  <CollaboratorDetail
-                    picturePath={'user.picturePath'}
-                    collaborator={collaborator}
-                  />
-                </Box>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={() => setOpen(false)} autoFocus>
-                  Close
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </React.Fragment>
-        ) : (
-          <Form collaborator={collaborator} setIsLoading={setIsLoading} setIsAdding={setIsAdding}></Form>
-        )}
+        {
+          !isAdding ? <DataTable
+                        columns={columns}
+                        data={collaborators}
+                        pagination
+                        title="Collaborators"
+                        highlightOnHover
+                        customStyles={customStyles}/> 
+                      : <Form collaborator={collaborator} setIsLoading={setIsLoading} setIsAdding={setIsAdding}></Form>
+        }
       </div>
     </div>
   );

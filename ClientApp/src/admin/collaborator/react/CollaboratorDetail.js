@@ -72,10 +72,6 @@ export const CollaboratorDetail = ({ userId, picturePath, collaborator }) => {
 
     setIsEditing(false);
   };
-  /* 
-  if (!user) {
-    return null;
-  } */
 
   return (
     <WidgetWrapper>

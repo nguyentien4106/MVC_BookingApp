@@ -133,12 +133,24 @@ input {
     }
 }
 
+.images-preview{
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
 .image-preview{
   position: relative;
+  width: 250px;
 
   &__remove{
     position: absolute;
     top: 0;
     right: 0;
   }
+}
+
+form{
+  margin: 0 20px;
+  max-width: 100%;
 }

@@ -31,7 +31,7 @@ export function Form({ collaborator, setIsLoading }) {
     if(!isSubmit) {
       return
     }
-    
+
     if(isEdit){
       update()
     }
@@ -73,13 +73,17 @@ export function Form({ collaborator, setIsLoading }) {
   }
 
   const renderPreviewImages = () => {
-    return previewImages && previewImages.map((img, index) => {
-      return (
-        <div className='col-3 image' key={index}> 
-          <img height={300} src={URL.createObjectURL(img)} className=''></img>
-          <i onClick={() => handleDeleteImagePreview(img)} style={{ cursor: 'pointer' }}><Delete></Delete></i>
-        </div>
-      )})
+    return previewImages && <div width="100%" className='images-preview'>
+      {
+        previewImages.map((img, index) => {
+          return (
+            <div className='image-preview' key={index}> 
+              <img width={250} src={URL.createObjectURL(img)}></img>
+              <i onClick={() => handleDeleteImagePreview(img)} className='pointer image-preview__remove'><Delete></Delete></i>
+            </div>
+          )})
+      }
+    </div>
   }
 
   return (
@@ -87,66 +91,70 @@ export function Form({ collaborator, setIsLoading }) {
       setParams(({...params, ...data}))
       setIsSubmit(true)
     })}>
-        <div className='d-flex justify-content-between' style={{width: "100%"}}>
-          <div className='form-group' style={{width: "50%"}}>
-            <label>First Name</label>
-            <input className='form-control' {...register('FirstName', { required: true })} />
-            {errors.FirstName && <p className='text-danger'>First name is required.</p>}
+        <div style={{width: "100%"}}>
+          <div className='form-group d-flex flex-gap' style={{width: "50%"}}>
+              <div className='col-6'>
+                <label>First Name</label>
+                <input className='form-control' {...register('FirstName', { required: true })} />
+                {errors.FirstName && <p className='text-danger'>First name is required.</p>}
 
-            <label>Title</label>
-            <input className='form-control'{...register('Title')} />
+                <label>Title</label>
+                <input className='form-control'{...register('Title')} />
 
-            <label>Description</label>
-            <input className='form-control'{...register('Description')}/>
+                <label>Description</label>
+                <input className='form-control'{...register('Description')}/>
 
-            <label>Address</label>
-            <input className='form-control'{...register('Address')} />
+                <label>Address</label>
+                <input className='form-control'{...register('Address')} />
 
-            <label>V2</label>
-            <input className='form-control'{...register('V2', {required: true})} />
-            {errors.V2 && <p className='text-danger'>Vòng 2 is required.</p>}
+                <label>V2</label>
+                <input className='form-control'{...register('V2', {required: true})} />
+                {errors.V2 && <p className='text-danger'>Vòng 2 is required.</p>}
 
-            <label>Hobbies</label>
-            <input className='form-control'{...register('Hobbies')} />
+                <label>Hobbies</label>
+                <input className='form-control'{...register('Hobbies')} />
+              </div>
+
+              <div className='col-6'>
+                <label>Last Name</label>
+                <input className='form-control'{...register('LastName', { required: true })} />
+                {errors.LastName && <p className='text-danger'>Last name is required.</p>}
+              
+                <label>Birth Date</label>
+                <input className='form-control'
+                    {...register('BirthDate')} 
+                    type='date' 
+                    value={birthDate} 
+                    onChange={e => {
+                      setBirthDate(moment(e.target.value).format("yyyy-MM-DD"))
+                    }}/>
+
+                <label>Phone Number</label>
+                <input className='form-control'{...register('PhoneNumber', {required: true})} />
+                {errors.phoneNumber && <p className='text-danger'>Phone Number is required.</p>}
+
+                <label>V1</label>
+                <input className='form-control'{...register('V1', {required: true})}/>
+                {errors.V1 && <p className='text-danger'>Vòng 1 is required.</p>}
+
+                <label>V3</label>
+                <input className='form-control'{...register('V3', {required: true})}/>
+                {errors.V3 && <p className='text-danger'>Vòng 3 is required.</p>}
+
+
+                <label>School</label>
+                <input className='form-control'{...register('School')} />
+              </div>
+              <div className='col-12'>
+                
+                <label>UserImages</label>
+                <input className='form-control'{...register('UserImages')} type='file' multiple onChange={onUploadChange} accept='image/*'/>
+                <hr></hr>
+                {
+                  renderPreviewImages()
+                }
+              </div>
           </div>
-          <div className='form-group' style={{width: "50%"}}>
-            <label>Last Name</label>
-            <input className='form-control'{...register('LastName', { required: true })} />
-            {errors.LastName && <p className='text-danger'>Last name is required.</p>}
-          
-            <label>Birth Date</label>
-            <input className='form-control'
-                {...register('BirthDate')} 
-                type='date' 
-                value={birthDate} 
-                onChange={e => {
-                  setBirthDate(moment(e.target.value).format("yyyy-MM-DD"))
-                }}/>
-
-            <label>Phone Number</label>
-            <input className='form-control'{...register('PhoneNumber', {required: true})} />
-            {errors.phoneNumber && <p className='text-danger'>Phone Number is required.</p>}
-
-            <label>V1</label>
-            <input className='form-control'{...register('V1', {required: true})}/>
-            {errors.V1 && <p className='text-danger'>Vòng 1 is required.</p>}
-
-            <label>V3</label>
-            <input className='form-control'{...register('V3', {required: true})}/>
-            {errors.V3 && <p className='text-danger'>Vòng 3 is required.</p>}
-
-
-            <label>School</label>
-            <input className='form-control'{...register('School')} />
-          </div>
-          <div className='form-group'>
-            <label>UserImages</label>
-            <input className='form-control'{...register('UserImages')} type='file' multiple onChange={onUploadChange} accept='image/*'/>
-            <hr></hr>
-            {
-              renderPreviewImages()
-            }
-        </div>
         </div>
         
         <input type="submit" />
