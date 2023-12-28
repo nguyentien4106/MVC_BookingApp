@@ -12,7 +12,7 @@ namespace BookingApp.Profile.Converter
             foreach (var file in sourceMember)
             {
                 var stream = new MemoryStream(file.Image);
-                result.Add(new FormFile(stream, 0, file.Image.Length, file.Name ?? "name", file.Name ?? "fileName"));
+                result.Add(new FormFile(stream, 0, file.Image.Length, file.Name ?? "name", file.Id.ToString()));
             }
 
             return result;

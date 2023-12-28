@@ -1,6 +1,6 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { service } from '../../../service';
-import DataTable, { createTheme } from 'react-data-table-component';
+import DataTable from 'react-data-table-component';
 import { Form } from './Form';
 import ReactLoading from 'react-loading';
 import { Store } from 'react-notifications-component';
@@ -13,7 +13,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { CollaboratorDetail } from './CollaboratorDetail';
 import { Visibility } from '@mui/icons-material';
 import { Box } from '@mui/material';
-import { notify, notifySuccess } from '../../../helpers/functionHelper';
+import { notify } from '../../../helpers/functionHelper';
 
 export default function CollaboratorContainer(props) {
   const [collaborators, setCollaborators] = useState([]);

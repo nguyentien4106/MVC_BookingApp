@@ -21,3 +21,7 @@ body {
     width: 600px;
     height: auto;
 }
+
+.rnc__base {
+    width: calc(80%) !important;
+}

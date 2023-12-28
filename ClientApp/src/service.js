@@ -22,10 +22,9 @@ function getImages(url){
         const files = zip.files
 
         const imageNames = Object.keys(files)
-        console.log(`number of images is `, imageNames.length)
+        
         const images = []
         for(var imageName of imageNames){
-            // const img = await files[imageName].async("blob")
             const f = await files[imageName].async("arraybuffer")
             images.push(f)
         }

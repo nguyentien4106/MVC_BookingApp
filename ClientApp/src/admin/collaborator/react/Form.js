@@ -21,6 +21,7 @@ export function Form({ collaborator, setIsLoading }) {
       service.getImages(`/Admin/Collaborator/GetUserImages/${collaborator.Id}`).then(response => {
         console.log(response)
         const fileImages = response.map((item, idex) => new File([item], `image${idex}.jpeg`))
+        console.log(fileImages)
         setPreviewImages(prev => [...prev, ...fileImages])
       })
     }
@@ -30,7 +31,7 @@ export function Form({ collaborator, setIsLoading }) {
     if(!isSubmit) {
       return
     }
-    console.log(previewImages)
+    
     if(isEdit){
       update()
     }

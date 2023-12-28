@@ -55,7 +55,7 @@ namespace BookingApp.Services.Implement
             await _dbContext.Set<TModel>().AddAsync(entity);
             await _dbContext.SaveChangesAsync();
 
-            return _mapper.Map<TDto>(entity);
+            return dto;
         }
 
         public async Task<TDto> Update(TDto dto, Expression<Func<TModel, bool>>? where = null, params Expression<Func<TModel, object>>[] references)
@@ -67,16 +67,38 @@ namespace BookingApp.Services.Implement
             _dbContext.Update(entity);
             await _dbContext.SaveChangesAsync();
 
-            return _mapper.Map<TDto>(entity);
+            return dto;
+        }
+
+
+        public async Task<TDto> Update(TDto dto, Expression<Func<TModel, object>> identity = null, Expression<Func<TModel, bool>>? where = null, params Expression<Func<TModel, object>>[] references)
+        {
+            var entity = await _dbContext.Set<TModel>().FirstOrDefaultAsync(where ?? throw new ArgumentNullException(nameof(where)));
+            _mapper.Map(dto, entity);
+            LoadReferences(entity, references);
+
+            _dbContext.Update(entity);
+            _dbContext.Entry(entity).Property(identity).IsModified = false;
+
+            await _dbContext.SaveChangesAsync();
+
+            return dto;
         }
 
         public async Task<bool> Delete(Guid id)
         {
-            var entity = await _dbContext.Set<TModel>().FindAsync(id);
-            if (entity == null) return false;
+            try
+            {
+                var entity = await _dbContext.Set<TModel>().FindAsync(id);
+                if (entity == null) return false;
 
-            _dbContext.Remove(entity);
-            await _dbContext.SaveChangesAsync();
+                _dbContext.Remove(entity);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
 
             return true;
         }
@@ -103,18 +125,5 @@ namespace BookingApp.Services.Implement
             return entity;
         }
 
-        public async Task<TDto> Update(TDto dto, Expression<Func<TModel, object>> identity = null, Expression<Func<TModel, bool>>? where = null, params Expression<Func<TModel, object>>[] references)
-        {
-            var entity = await _dbContext.Set<TModel>().FirstOrDefaultAsync(where ?? throw new ArgumentNullException(nameof(where)));
-            _mapper.Map(dto, entity);
-            LoadReferences(entity, references);
-
-            _dbContext.Update(entity);
-            _dbContext.Entry(entity).Property(identity).IsModified = false;
-
-            await _dbContext.SaveChangesAsync();
-
-            return _mapper.Map<TDto>(entity);
-        }
     }
 }

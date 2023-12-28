@@ -55,14 +55,14 @@ namespace BookingApp.Areas.Admin.Controllers
         {
             var result = await _service.GetEntityById(m => m.Id == id);
 
-            return Json(result == null ? Result.Fail("Result null") : Result.Success(result));
+            return Json(result == null ? Result.Fail("The result return null.") : Result.Success(result));
         }
 
         public async Task<IActionResult> GetUserImages(Guid? id)
         {
             if(id == null)
             {
-                return Json(Result.Fail("Id null"));
+                return Json(Result.Fail("Can not get the Collaborator Id."));
             }
 
             var memoryStream = await _imageService.GetUserImagesById((Guid)id);
@@ -75,7 +75,7 @@ namespace BookingApp.Areas.Admin.Controllers
         {
             var result = await _service.Add(collaboratorDTO);
 
-            return Json(result == null ? Result.Fail("Result Null") : Result.Success(collaboratorDTO));
+            return Json(result == null ? Result.Fail("The result return null.") : Result.Success(collaboratorDTO));
         }
 
         [HttpPost] 
@@ -83,20 +83,21 @@ namespace BookingApp.Areas.Admin.Controllers
         {
             if(collaboratorDTO == null)
             {
-                return Json(Result.Fail("Can not get the value"));
+                return Json(Result.Fail("Form data return null. Please check it again."));
             }
 
-            if(collaboratorDTO.Code == 0)
+            if(collaboratorDTO.Id.Equals(new Guid()))
             {
-                return Json(Result.Fail("Not bind"));
+                return Json(Result.Fail("Collaborator is 000000000."));
             }
 
             var entity = _mapper.Map<Collaborator>(collaboratorDTO);
 
 
-            var result = await _service.Update(collaboratorDTO, item => item.Code, item => item.Id == collaboratorDTO.Id);
+            var result = await _service.Update(collaboratorDTO, identity: item => item.Code, item => item.Id == collaboratorDTO.Id);
             await _imageService.RemoveUserImagesById(collaboratorDTO.Id);
             await _imageService.AddImageToUser(collaboratorDTO.Id, collaboratorDTO.UserImages);
+
             return Json(Result.Success(result));
 
         }
@@ -104,11 +105,11 @@ namespace BookingApp.Areas.Admin.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            if (id == null) return Json(Result.Fail("Id null"));
+            if (id == null) return Json(Result.Fail("Can not get the Collaborator Id"));
 
             var result = await _service.Delete((Guid)id);
 
-            return Json(result ? Result.Success(result) : Result.Fail("Check more"));
+            return Json(result ? Result.Success(result) : Result.Fail("Can not delete with the id given, please check."));
         }
     }
 }
