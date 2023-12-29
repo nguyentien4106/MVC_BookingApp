@@ -38,7 +38,7 @@ namespace BookingApp.Areas.Admin.Controllers
         // GET: Admin/Collaborators
         public async Task<IActionResult> GetAll()
         {
-            var collaborators = await _service.GetAll();
+            var collaborators = await _service.GetAll(null, "BookingInformation");
             return Json(Result.Success(collaborators));
         }
 
@@ -99,5 +99,6 @@ namespace BookingApp.Areas.Admin.Controllers
 
             return Json(result ? Result.Success(result) : Result.Fail("Can not delete with the id given, please check."));
         }
+
     }
 }

@@ -1,11 +1,13 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { service } from '../../../service';
 import DataTable from 'react-data-table-component';
-import { Form } from './Form';
+import { FormGeneralInformation } from './form/FormGeneralInformation';
 import { Store } from 'react-notifications-component';
-import { Edit, Delete } from '@mui/icons-material';
 import { notify } from '../../../helpers/functionHelper';
 import Loading from '../../../components/Loading';
+import MenuOptions from './MenuOptions';
+import { StatusAction } from './constants';
+import FormBookingInformation from './form/FormBookingInformation';
 
 const customStyles = {
   rows: {
@@ -32,6 +34,7 @@ export default function CollaboratorContainer(props) {
   const [isAdding, setIsAdding] = useState(false);
   const [collaborator, setCollaborator] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentAction, setCurrentAction] = useState(StatusAction.Show)
 
   const columns = [
     {
@@ -85,29 +88,41 @@ export default function CollaboratorContainer(props) {
     {
       name: 'Action',
       sortable: false,
-      cell: (collaborator) => [
-        <i
-          key={collaborator.Code}
-          onClick={() => handleEdit(collaborator)}
-          style={{ cursor: 'pointer' }}
-        >
-          <Edit></Edit>
-        </i>,
-        <i
-          onClick={() => handleDelete(collaborator)}
-          style={{ cursor: 'pointer' }}
-        >
-          <Delete></Delete>
-        </i>,
-        // <i
-        //   onClick={handleClickOpen.bind(this, collaborator)}
-        //   style={{ cursor: 'pointer' }}
-        // >
-        //   <Visibility></Visibility>
-        // </i>,
-      ],
+      cell: collaborator => <MenuOptions items={getItems(collaborator)}/>
     },
   ];
+
+  const getItems = collaborator => [
+    {
+      name: "Sửa thông tin cơ bản CTV",
+      action: () => {
+        setCurrentAction(StatusAction.EditGeneralInformation)
+        setCollaborator(collaborator)
+      }
+    },
+    {
+      name: "Sửa thông tin Booking",
+      action: () => {
+        setCurrentAction(StatusAction.EditBookingInformation)
+        setCollaborator(collaborator)
+        console.log('sửa thông tin Booking', collaborator)
+      }
+    },
+    {
+      name: "Xem chi tiết",
+      action: () => {
+        setCollaborator(collaborator)
+        console.log('xem chi tiết', collaborator)
+      }
+    },
+    {
+      name: "Xoá CTV",
+      action: () => {
+        console.log('Xoá CTV', collaborator)
+        handleDelete(collaborator)
+      }
+    },
+  ]
 
   useEffect(() => {
     setIsLoading(true)
@@ -130,11 +145,6 @@ export default function CollaboratorContainer(props) {
     })
   }
 
-  const handleEdit = collaborator => {
-    setIsAdding((prev) => !prev)
-    setCollaborator(collaborator)
-  }
-
   const handleAddNew = () => {
     setIsAdding((prev) => !prev)
     setCollaborator(null)
@@ -147,21 +157,29 @@ export default function CollaboratorContainer(props) {
       }
       <div className="d-flex justify-content-end">
         {
-          !isAdding ? <button className="btn btn-primary" onClick={handleAddNew}>Create New</button> : 
-                      <button className="btn btn-primary" onClick={() => setIsAdding((prev) => !prev)}>Back</button>
+          currentAction === StatusAction.Show ? <button className="btn btn-primary" onClick={() => setCurrentAction(StatusAction.Add)}>Create New</button> : 
+                                                <button className="btn btn-primary" onClick={() => setCurrentAction(StatusAction.Show)}>Back</button>
         }
       </div>
       <div className="table">
         {
-          !isAdding ? <DataTable
-                        columns={columns}
-                        data={collaborators}
-                        pagination
-                        title="Collaborators"
-                        highlightOnHover
-                        // customStyles={customStyles}
-                      /> 
-                      : <Form collaborator={collaborator} setIsLoading={setIsLoading} setIsAdding={setIsAdding}></Form>
+          currentAction === StatusAction.EditBookingInformation && <FormBookingInformation collaborator={collaborator} setIsLoading={setIsLoading} setIsAdding={setIsAdding} />
+        }
+        {
+          currentAction === StatusAction.EditGeneralInformation && <FormGeneralInformation collaborator={collaborator} setIsLoading={setIsLoading} setIsAdding={setIsAdding} />
+        }
+        {
+          currentAction === StatusAction.Add && <FormGeneralInformation collaborator={null} setIsLoading={setIsLoading} setIsAdding={setIsAdding} />
+        }
+        {
+          currentAction === StatusAction.Show && <DataTable
+                                                      columns={columns}
+                                                      data={collaborators}
+                                                      pagination
+                                                      title="Collaborators"
+                                                      highlightOnHover
+                                                      customStyles={customStyles}
+                                                    /> 
         }
       </div>
     </div>

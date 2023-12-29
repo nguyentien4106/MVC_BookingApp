@@ -1,13 +1,12 @@
 import { useForm } from 'react-hook-form';
 import React, { useEffect, useState } from 'react';
-import { service } from '../../../service';
+import { service } from '../../../../service';
 import moment from 'moment';
 import { Store } from 'react-notifications-component';
-import { getFormData, notify } from '../../../helpers/functionHelper';
+import { getFormData, notify } from '../../../../helpers/functionHelper';
 import { Delete } from '@mui/icons-material';
-import DropdownCheckList from '../../../components/DropdownCheckList';
 
-export function Form({ collaborator, setIsLoading }) {
+export function FormGeneralInformation({ collaborator, setIsLoading }) {
   const { register, handleSubmit, formState: { errors }} = useForm({defaultValues: collaborator});
   const isEdit = !!collaborator
   const [params, setParams] = useState(collaborator)
@@ -157,36 +156,7 @@ export function Form({ collaborator, setIsLoading }) {
                 }
               </div>
           </div>
-          <h2>Booking Information</h2>
-          <div className='form-group d-flex flex-gap' style={{width: "50%"}}>
-            <div className='col-12'>
-                <label>Display Name</label>
-                <input className='form-control' {...register('DisplayName', { required: true })} />
-                {errors.DisplayName && <p className='text-danger'>Display Name is required.</p>}
-
-                <label>Information</label>
-                <input className='form-control'{...register('Information')} />
-
-            </div>
-            <div className='col-12'>
-                <label>Price</label>
-                <input className='form-control'{...register('Price')}/>
-                {errors.Price && <p className='text-danger'>Price is required.</p>}
-
-                <label>Services</label>
-                <DropdownCheckList names={["Cafe", "LoL", "Valorant"]} handleChange={handleChange} currentValue={services}></DropdownCheckList>
-
-                <label>Status</label>
-                <select className='form-control' name="status" id="status" {...register('Status')}>
-                  <option value="0">Not Ready</option>
-                  <option value="1" defaultValue>Ready </option>
-                  <option value="2">Leave</option>
-                  <option value="3">Coming soon</option>
-                </select>
-            </div>
-          </div>
         </div>
-        
         <input type="submit" />
     </form>
   );
