@@ -6,6 +6,7 @@ using BookingApp.Models.Result;
 using BookingApp.Services.Implement;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookingApp.Areas.Admin.Controllers
 {
@@ -15,10 +16,16 @@ namespace BookingApp.Areas.Admin.Controllers
     public class BookingInformationController : Controller
     {
         private readonly AppService<BookingInformation, BookingInformationDTO> _service;
+        private readonly AppService<CollaboratorServices, CollaboratorServicesDTO> _collaboratorServices;
+        private readonly IMapper _mapper;
+        private readonly ApplicationDbContext _context;
 
         public BookingInformationController(IMapper mapper, ApplicationDbContext context)
         {
             _service = new AppService<BookingInformation, BookingInformationDTO>(mapper, context);
+            _collaboratorServices = new AppService<CollaboratorServices, CollaboratorServicesDTO>(mapper, context);
+            _mapper = mapper;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -28,21 +35,31 @@ namespace BookingApp.Areas.Admin.Controllers
 
         public async Task<IActionResult> GetByCollaborator(Guid? id)
         {
-            var bookings = await _service.GetAll(item => item.CollaboratorId == id, "Services");
+            var bookings = await _service.GetAll(item => item.CollaboratorId == id, "CollaboratorServices");
             var result = bookings.FirstOrDefault();
 
             return Json(result == null ? Result.Fail("No booking information found") : Result.Success(result));
         }
 
-        public async Task<IActionResult> Add(Guid? id, BookingInformationDTO dto)
+        [HttpPost]
+        public async Task<IActionResult> Add([FromBody]BookingInformationDTO dto)
         {
-            if(id == null) return Json(Result.Fail("Id null"));
+            var exist = await _context.BookingInformations.Where(item => item.CollaboratorId == dto.CollaboratorId).FirstOrDefaultAsync();
             
-            dto.CollaboratorId = (Guid)id;
+            if(exist == null)
+            {
+                var result = await _service.Add(dto, item => item.CollaboratorServices);
+                return Json(true);
 
-            var result = await _service.Add(dto);
-
-            return Json(Result.Success(result));
+            }
+            else
+            {
+                foreach(var item in dto.CollaboratorServices)
+                {
+                    await _collaboratorServices.Add(item);
+                }
+                return Json("update");
+            }
         }
     }
 }

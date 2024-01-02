@@ -11,5 +11,6 @@ namespace BookingApp.Service
         Task<TDto> Update(TDto dto, Expression<Func<TModel, bool>>? where = null, params Expression<Func<TModel, object>>[] references);
         Task<TDto> Update(TDto dto, Expression<Func<TModel, object>> identity, Expression<Func<TModel, bool>>? where = null, params Expression<Func<TModel, object>>[] references);
         Task<bool> Delete(Guid id);
+        Task<bool> Delete(Expression<Func<TModel, bool>>? where = null);
     }
 }

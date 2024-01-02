@@ -16,6 +16,8 @@ namespace BookingApp.Entities
 
         public string? Description { get; set; }
 
+        public List<CollaboratorServices> CollaboratorServices { get; set; }    
+
         public static explicit operator Service(ServiceDTO v)
         {
             throw new NotImplementedException();

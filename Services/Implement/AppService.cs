@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BookingApp.Data;
+using BookingApp.Entities;
 using BookingApp.Service;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -125,5 +126,33 @@ namespace BookingApp.Services.Implement
             return entity;
         }
 
+        public async Task<bool> Delete(Expression<Func<TModel, bool>>? where = null)
+        {
+            var query = ApplyIncludes(_dbContext.Set<TModel>());
+
+            if (where != null)
+            {
+                query = query.Where(where);
+            }
+
+            var entities = await query.ToListAsync();
+
+            try
+            {
+                _dbContext.RemoveRange(entities);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        internal Task Add(CollaboratorServices item)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

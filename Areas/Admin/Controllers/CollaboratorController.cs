@@ -17,12 +17,14 @@ namespace BookingApp.Areas.Admin.Controllers
     public class CollaboratorController : Controller
     {
         private readonly AppService<Collaborator, CollaboratorDTO> _service;
+        private readonly AppService<BookingInformation, BookingInformationDTO> _bookingInformationService;
         private readonly IImageService _imageService;
         private readonly IMapper _mapper;
 
         public CollaboratorController(IMapper mapper, ApplicationDbContext context, IImageService imageService)
         {
             _service = new AppService<Collaborator, CollaboratorDTO>(mapper, context);
+            _bookingInformationService = new AppService<BookingInformation, BookingInformationDTO>(mapper, context);
             _imageService = imageService;
             _mapper = mapper;
         }
@@ -42,9 +44,9 @@ namespace BookingApp.Areas.Admin.Controllers
             return Json(Result.Success(collaborators));
         }
 
-        public async Task<IActionResult> Get(Guid? id)
+        public async Task<IActionResult> GetBookingInformation(Guid? id)
         {
-            var result = await _service.GetEntityById(m => m.Id == id);
+            var result = await _bookingInformationService.GetById(m => m.CollaboratorId == id, "Services");
 
             return Json(result == null ? Result.Fail("The result return null.") : Result.Success(result));
         }
@@ -98,6 +100,15 @@ namespace BookingApp.Areas.Admin.Controllers
             var result = await _service.Delete((Guid)id);
 
             return Json(result ? Result.Success(result) : Result.Fail("Can not delete with the id given, please check."));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateBookingInformation([FromBody]BookingInformationDTO dto)
+        {
+            var result = await _bookingInformationService.Add(dto);
+
+            return Json(Result.Success(result));
+
         }
 
     }

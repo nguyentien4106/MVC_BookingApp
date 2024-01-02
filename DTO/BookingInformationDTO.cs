@@ -1,4 +1,6 @@
-﻿namespace BookingApp.DTO
+﻿using BookingApp.Entities;
+
+namespace BookingApp.DTO
 {
     public class BookingInformationDTO
     {
@@ -6,7 +8,7 @@
 
         public Guid CollaboratorId { get; set; }
 
-        public List<ServiceDTO>? Services { get; set; }
+        public ICollection<CollaboratorServicesDTO>? CollaboratorServices { get; set; }
 
         public string? DisplayName { get; set; }
 

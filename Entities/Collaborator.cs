@@ -23,9 +23,9 @@ namespace BookingApp.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? Created { get; set; }
 
-        public List<CollaboratorServices>? CollaboratorServices { get; set; }
-
         public BookingInformation? BookingInformation { get; set; }
 
+
+        public List<CollaboratorServices>? CollaboratorServices { get; set; }
     }
 }

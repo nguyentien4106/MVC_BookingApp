@@ -62,9 +62,6 @@ namespace BookingApp.Migrations
                     b.Property<bool?>("IsVeryfied")
                         .HasColumnType("bit");
 
-                    b.Property<double?>("Price")
-                        .HasColumnType("float");
-
                     b.Property<int?>("Status")
                         .HasColumnType("int");
 
@@ -139,13 +136,24 @@ namespace BookingApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CollaboratorId")
+                    b.Property<string>("AdditionalInformation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("BookingInformationId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CollaboratorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double?>("Prices")
+                        .HasColumnType("float");
 
                     b.Property<Guid>("ServiceId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BookingInformationId");
 
                     b.HasIndex("CollaboratorId");
 
@@ -160,9 +168,6 @@ namespace BookingApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("BookingInformationId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -173,8 +178,6 @@ namespace BookingApp.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BookingInformationId");
 
                     b.ToTable("Services");
                 });
@@ -403,14 +406,18 @@ namespace BookingApp.Migrations
 
             modelBuilder.Entity("BookingApp.Entities.CollaboratorServices", b =>
                 {
-                    b.HasOne("BookingApp.Entities.Collaborator", "Collaborator")
+                    b.HasOne("BookingApp.Entities.BookingInformation", null)
                         .WithMany("CollaboratorServices")
-                        .HasForeignKey("CollaboratorId")
+                        .HasForeignKey("BookingInformationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BookingApp.Entities.Collaborator", "Collaborator")
+                        .WithMany("CollaboratorServices")
+                        .HasForeignKey("CollaboratorId");
+
                     b.HasOne("BookingApp.Entities.Service", "Service")
-                        .WithMany()
+                        .WithMany("CollaboratorServices")
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -418,13 +425,6 @@ namespace BookingApp.Migrations
                     b.Navigation("Collaborator");
 
                     b.Navigation("Service");
-                });
-
-            modelBuilder.Entity("BookingApp.Entities.Service", b =>
-                {
-                    b.HasOne("BookingApp.Entities.BookingInformation", null)
-                        .WithMany("Services")
-                        .HasForeignKey("BookingInformationId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -480,7 +480,7 @@ namespace BookingApp.Migrations
 
             modelBuilder.Entity("BookingApp.Entities.BookingInformation", b =>
                 {
-                    b.Navigation("Services");
+                    b.Navigation("CollaboratorServices");
                 });
 
             modelBuilder.Entity("BookingApp.Entities.Collaborator", b =>
@@ -490,6 +490,11 @@ namespace BookingApp.Migrations
                     b.Navigation("CollaboratorServices");
 
                     b.Navigation("UserImages");
+                });
+
+            modelBuilder.Entity("BookingApp.Entities.Service", b =>
+                {
+                    b.Navigation("CollaboratorServices");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,6 @@
-﻿namespace BookingApp.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace BookingApp.Entities
 {
     public class BookingInformation
     {
@@ -6,9 +8,7 @@
 
         public Guid CollaboratorId { get; set; }
 
-        public List<Service>? Services { get; set; }
-
-        public double? Price { get; set; }
+        public ICollection<CollaboratorServices>? CollaboratorServices { get; set; }
 
         public string? DisplayName { get; set; }
 

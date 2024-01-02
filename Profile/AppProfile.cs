@@ -28,7 +28,6 @@ namespace BookingApp.Profile
                 .ForMember(item => item.IsVeryfied, opt => opt.MapFrom(src => src.BookingInformation.IsVeryfied))
                 .ForMember(item => item.Status, opt => opt.MapFrom(src => src.BookingInformation.Status))
                 .ForMember(item => item.Information, opt => opt.MapFrom(src => src.BookingInformation.Information))
-                .ForMember(item => item.Services, opt => opt.MapFrom(src => src.BookingInformation.Services))
                 ;
 
             CreateMap<CollaboratorDTO, Collaborator>()
@@ -50,11 +49,18 @@ namespace BookingApp.Profile
                         IsVeryfied = true,
                         Status = src.Status,
                         Information = src.Information,
-                        Services = src.Services.Select(service => service.ToServiceEntity()).ToList()
                     });
                 })
                 ;
+
+
             CreateMap<BookingApp.Entities.Service, ServiceDTO>().ReverseMap();
+            CreateMap<BookingApp.Entities.CollaboratorServices, CollaboratorServicesDTO>();
+            CreateMap<CollaboratorServicesDTO, CollaboratorServices>()
+                .ForMember(item => item.Collaborator, opt=> opt.Ignore())
+                .ForMember(item => item.Service, opt=> opt.Ignore())
+                ;
+            CreateMap<BookingApp.Entities.BookingInformation, BookingInformationDTO>().ReverseMap();
         }
     }
 }

@@ -36,7 +36,7 @@ namespace BookingApp.DTO
 
         public DateTime? Created { get; set; }
 
-        public List<ServiceDTO>? Services { get; set; } = new List<ServiceDTO>();
+        public List<CollaboratorServicesDTO>? CollaboratorServices { get; set; } = new List<CollaboratorServicesDTO>();
 
         public double? Price { get; set; }
 
