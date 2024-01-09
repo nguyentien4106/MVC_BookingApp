@@ -12,7 +12,6 @@ export default function FormBookingInformation({collaborator}) {
 
     useEffect(() => {
         service.get('/Admin/Service/GetAll').then(rs => {
-            console.log(rs.Data)
             setServicesAvailable(rs.Data)
         })
     }, [])
@@ -28,7 +27,6 @@ export default function FormBookingInformation({collaborator}) {
     }, [])
     const onSubmit = (e) => {
         if(validateAll()){
-            console.log('post',collaboratorServices)
             service.post("/Admin/BookingInformation/Add", {
                 CollaboratorId: collaborator.Id,
                 DisplayName: displayName,
@@ -36,7 +34,7 @@ export default function FormBookingInformation({collaborator}) {
                 Status: status,
                 CollaboratorServices: collaboratorServices
             }).then(rs => {
-                console.log(rs)
+                notify(Store, rs.IsSuccessfully, rs.Message)
             })
         }
     }
@@ -63,10 +61,6 @@ export default function FormBookingInformation({collaborator}) {
             setCollaboratorServices(prev => prev.map((item, idx) => index === idx ? Object.assign({}, item, { Prices:  e.target.value}) : item))
         }
 
-        const onChangeDescriptionService = e => {
-            setCollaboratorServices(prev => prev.map((item, idx) => index === idx ? Object.assign({}, item, { Description:  e.target.value}) : item))
-        }
-
         const onDeleteService = e => {
             setCollaboratorServices(prev => prev.filter((item, idx) => idx !== index))
         }
@@ -75,7 +69,7 @@ export default function FormBookingInformation({collaborator}) {
             <div key={item.Name} className='form-group d-flex flex-gap' style={{width: "50%"}}>
                 <div className='col-6'>
                     <label>Service Name</label>
-                    <select className='form-control' onChange={onChangeNameService} value={collaboratorServices[index].Name}>
+                    <select className='form-control' onChange={onChangeNameService} value={item.ServiceId}>
                         {
                             servicesAvailable.map(item => <option value={item.Id} key={item.Name}>{item.Name}</option>)
                         }
@@ -83,11 +77,7 @@ export default function FormBookingInformation({collaborator}) {
                 </div>
                 <div className='col-6'>
                     <label>Price</label>
-                    <input type='number' className='form-control' onChange={onChangePriceService} value={collaboratorServices[index].Price}></input>
-                </div>
-                <div className='col-6'>
-                    <label>Decsription</label>
-                    <input className='form-control' onChange={onChangeDescriptionService} value={collaboratorServices[index].Description}/>
+                    <input type='number' className='form-control' onChange={onChangePriceService} value={item.Prices}></input>
                 </div>
                 <div className='col-1 d-flex flex-column'>
                     <label>Delete</label>
@@ -99,8 +89,8 @@ export default function FormBookingInformation({collaborator}) {
     }
 
     return (
-        <div >
-            <h4>{`Thông tin booking của ${collaborator.FirstName} ${collaborator.LastName}`}</h4>
+        <div key={`booking-information-form`}>
+            <h4>{`Thông tin booking của ${collaborator.FirstName} ${collaborator.LastName} - ${collaborator.Code}`}</h4>
             <br></br>
             <hr/>
             <div className='form-group d-flex flex-gap' style={{width: "50%"}}>

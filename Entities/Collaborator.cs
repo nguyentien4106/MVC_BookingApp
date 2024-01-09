@@ -25,7 +25,5 @@ namespace BookingApp.Entities
 
         public BookingInformation? BookingInformation { get; set; }
 
-
-        public List<CollaboratorServices>? CollaboratorServices { get; set; }
     }
 }

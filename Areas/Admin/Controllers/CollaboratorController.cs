@@ -101,15 +101,6 @@ namespace BookingApp.Areas.Admin.Controllers
 
             return Json(result ? Result.Success(result) : Result.Fail("Can not delete with the id given, please check."));
         }
-
-        [HttpPost]
-        public async Task<IActionResult> UpdateBookingInformation([FromBody]BookingInformationDTO dto)
-        {
-            var result = await _bookingInformationService.Add(dto);
-
-            return Json(Result.Success(result));
-
-        }
-
+        
     }
 }

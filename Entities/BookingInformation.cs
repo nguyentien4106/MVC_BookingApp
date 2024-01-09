@@ -8,6 +8,8 @@ namespace BookingApp.Entities
 
         public Guid CollaboratorId { get; set; }
 
+        public Collaborator? Collaborator { get; set; } = null!;
+
         public ICollection<CollaboratorServices>? CollaboratorServices { get; set; }
 
         public string? DisplayName { get; set; }

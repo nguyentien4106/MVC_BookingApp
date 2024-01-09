@@ -8,7 +8,7 @@ namespace BookingApp.DTO
 
         public Guid CollaboratorId { get; set; }
 
-        public ICollection<CollaboratorServicesDTO>? CollaboratorServices { get; set; }
+        public ICollection<CollaboratorServices>? CollaboratorServices { get; set; }
 
         public string? DisplayName { get; set; }
 
