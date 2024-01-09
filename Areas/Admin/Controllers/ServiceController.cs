@@ -60,22 +60,22 @@ namespace BookingApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(ServiceDTO serviceDTO)
+        public async Task<IActionResult> Add([FromBody] ServiceDTO serviceDTO)
         {
             var result = await _service.Add(serviceDTO);
 
             return Json(Result.Success(result));
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update(Guid? id, ServiceDTO serviceDTO)
+        [HttpPost]
+        public async Task<IActionResult> Update([FromBody]ServiceDTO serviceDTO)
         {
-            if(id == null)
+            if (serviceDTO.Id == null)
             {
                 return Json(Result.Fail("id null"));
             }
 
-            var result = await _service.Update(serviceDTO, item => item.Id == id);
+            var result = await _service.Update(serviceDTO, item => item.Id == serviceDTO.Id);
 
             return Json(Result.Success(result));
         }

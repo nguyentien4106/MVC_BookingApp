@@ -12,15 +12,7 @@ namespace BookingApp.Entities
 
         public string? Name { get; set; }
 
-        public double? Price { get; set; }
-
         public string? Description { get; set; }
 
-        public List<CollaboratorServices> CollaboratorServices { get; set; }    
-
-        public static explicit operator Service(ServiceDTO v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

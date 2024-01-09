@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { service } from '../../../service';
-import DataTable, { createTheme } from 'react-data-table-component';
-import ReactLoading from 'react-loading';
-import { Store } from 'react-notifications-component';
-import axios from 'axios';
+import DataTable from 'react-data-table-component';
 import { Edit, Delete } from '@mui/icons-material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -11,8 +8,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ServiceDetail } from './ServiceDetail';
-import { Visibility } from '@mui/icons-material';
 import { Box } from '@mui/material';
+import { notify } from '../../../helpers/functionHelper';
+import { Store } from 'react-notifications-component';
 
 const customStyles = {
   rows: {
@@ -34,19 +32,14 @@ const customStyles = {
   },
 };
 
-export default function ServiceContainer(props) {
+export default function ServiceContainer() {
   const [services, setServices] = useState([]);
-  const [selectedCode, setSelectedCode] = useState(null);
-  const [isAdding, setIsAdding] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleClick = (title) => {
-    console.log(`You clicked me! ${title}`);
-  };
+  const [currentService, setCurrentService] = useState(null)
+  const [open, setOpen] = useState(false);
+  const [openForm, setOpenForm] = useState(false);
 
   useEffect(() => {
     service.get('/Admin/Service/GetAll').then(data => {
-      console.log(data.Data)
       setServices(data.Data);
     });
   }, []);
@@ -72,8 +65,11 @@ export default function ServiceContainer(props) {
       sortable: false,
       cell: (row) => [
         <i
-          key={row.code}
-          onClick={handleClick.bind(this, row)}
+          key={row.Id}
+          onClick={() => {
+            setOpen(prev => !prev)
+            setCurrentService(row)
+          }}
           style={{ cursor: 'pointer' }}
         >
           <Edit></Edit>
@@ -81,71 +77,30 @@ export default function ServiceContainer(props) {
         <i onClick={() => handleDelete(row)} style={{ cursor: 'pointer' }}>
           <Delete></Delete>
         </i>,
-        <i
-          onClick={handleClickOpen.bind(this, row)}
-          style={{ cursor: 'pointer' }}
-        >
-          <Visibility></Visibility>
-        </i>,
       ],
     },
   ];
 
   const handleDelete = row => {
-    console.log(row)
-    service.delete(`/Admin/Service/Delete/${row.Id}`).then(result => {
-      console.log(result)
+    service.delete(`/Admin/Service/Delete/${row.Id}`).then(rs => {
+      notify(Store, rs.IsSuccessfully, rs.Message)
+      if(rs.IsSuccessfully){
+        setServices(prev => prev.filter(item => item.Id !== row.Id))
+      }
     })
   }
 
-
- 
-  const [open, setOpen] = useState(false);
-  const [openForm, setOpenForm] = useState(false);
-
-  const handleClickOpen = (row) => {
-    console.log(row);
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   return (
     <div>
-      {isLoading && (
-        <div className="blockUI">
-          <div className="blockUI__mask" />
-          <div className="blockUI__inner">
-            <ReactLoading
-              color="blue"
-              type="spin"
-              height={100}
-              width={100}
-            ></ReactLoading>
-          </div>
-        </div>
-      )}
       <div className="d-flex justify-content-end">
-        {!isAdding ? (
-          <button
-            className="btn btn-primary"
-            onClick={() => setIsAdding((prev) => !prev)}
-          >
-            Create New
-          </button>
-        ) : (
-          <button
-            className="btn btn-primary"
-            onClick={() => setIsAdding((prev) => !prev)}
-          >
-            Back
-          </button>
-        )}
+      <button
+        className="btn btn-primary"
+        onClick={() => setOpenForm((prev) => !prev)}
+      >
+        Create New
+      </button>
       </div>
       <div className="table">
-        {!isAdding ? (
           <React.Fragment>
             <DataTable
               columns={columns}
@@ -156,32 +111,52 @@ export default function ServiceContainer(props) {
               customStyles={customStyles}
             />
             
-            <Dialog
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">
-                {'Personal Information'}
-              </DialogTitle>
-              <DialogContent>
-                <Box>
-                  <ServiceDetail service={service}/>
-                </Box>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose} autoFocus>
-                  Close
-                </Button>
-              </DialogActions>
-            </Dialog>
+            {
+              open && <Dialog
+                        open={open}
+                        onClose={() => setOpen(prev => !prev)}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                      >
+                        <DialogTitle id="alert-dialog-title">
+                          {'Service Information'}
+                        </DialogTitle>
+                        <DialogContent>
+                          <Box>
+                            <ServiceDetail item={currentService}/>
+                          </Box>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={() => setOpen(prev => !prev)} autoFocus>
+                            Close
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+            }
+
+            {
+              openForm && <Dialog
+                          open={openForm}
+                          onClose={() => setOpenForm(prev => !prev)}
+                          aria-labelledby="alert-dialog-title"
+                          aria-describedby="alert-dialog-description"
+                        >
+                          <DialogTitle id="alert-dialog-title">
+                            {'ADd new Information'}
+                          </DialogTitle>
+                          <DialogContent>
+                            <Box>
+                              <ServiceDetail/>
+                            </Box>
+                          </DialogContent>
+                          <DialogActions>
+                            <Button onClick={() => setOpenForm(prev => !prev)} autoFocus>
+                              Close
+                            </Button>
+                          </DialogActions>
+                        </Dialog>
+            }
           </React.Fragment>
-        ) : (
-          {
-            /* <Form service={service} setIsLoading={setIsLoading}></Form> */
-          }
-        )}
       </div>
     </div>
   );

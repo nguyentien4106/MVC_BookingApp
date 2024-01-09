@@ -145,11 +145,6 @@ export default function CollaboratorContainer(props) {
     })
   }
 
-  const handleAddNew = () => {
-    setIsAdding((prev) => !prev)
-    setCollaborator(null)
-  }
-
   return (
     <div>
       {
