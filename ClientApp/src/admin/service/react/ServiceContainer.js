@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { service } from '../../../service';
 import DataTable, { createTheme } from 'react-data-table-component';
-import { Form } from './Form';
 import ReactLoading from 'react-loading';
 import { Store } from 'react-notifications-component';
 import axios from 'axios';
@@ -15,77 +14,57 @@ import { ServiceDetail } from './ServiceDetail';
 import { Visibility } from '@mui/icons-material';
 import { Box } from '@mui/material';
 
+const customStyles = {
+  rows: {
+    style: {
+      minHeight: '72px', // override the row height
+    },
+  },
+  headCells: {
+    style: {
+      paddingLeft: '8px', // override the cell padding for head cells
+      paddingRight: '8px',
+    },
+  },
+  cells: {
+    style: {
+      paddingLeft: '8px', // override the cell padding for data cells
+      paddingRight: '8px',
+    },
+  },
+};
+
 export default function ServiceContainer(props) {
   const [services, setServices] = useState([]);
   const [selectedCode, setSelectedCode] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
-  const [service, setService] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    service.get('/Admin/Service/getall').then((response) => {
-      console.log(response);
-      setServices(response.Data);
-    });
-  }, []);
 
   const handleClick = (title) => {
     console.log(`You clicked me! ${title}`);
   };
 
   useEffect(() => {
-    service.get('/Admin/Service/getall').then((data) => {
+    service.get('/Admin/Service/GetAll').then(data => {
+      console.log(data.Data)
       setServices(data.Data);
     });
   }, []);
 
   const columns = [
     {
-      name: 'Mã',
-      selector: (row) => row.Code,
-      sortable: true,
-      cell: (row) => (
-        <a href="https://google.com" target="_blank" className="dlink">
-          {row.Code}
-        </a>
-      ),
-    },
-    {
-      name: 'First Name',
-      selector: (row) => row.FirstName,
+      name: 'No.',
+      selector: (row) => row.Id,
       sortable: true,
     },
     {
-      name: 'Last Name',
-      selector: (row) => row.LastName,
+      name: 'Name',
+      selector: (row) => row.Name,
       sortable: true,
     },
     {
-      name: 'Birth of Date',
-      selector: (row) => row.BirthDate,
-      sortable: true,
-    },
-    {
-      name: 'V1',
-      selector: (row) => row.V1,
-      sortable: true,
-      width: '100px',
-    },
-    {
-      name: 'V2',
-      selector: (row) => row.V2,
-      sortable: true,
-      width: '100px',
-    },
-    {
-      name: 'V3',
-      selector: (row) => row.V3,
-      sortable: true,
-      width: '100px',
-    },
-    {
-      name: 'Joined Date',
-      selector: (row) => row.Created,
+      name: 'Description',
+      selector: (row) => row.Description,
       sortable: true,
     },
     {
@@ -99,7 +78,7 @@ export default function ServiceContainer(props) {
         >
           <Edit></Edit>
         </i>,
-        <i onClick={handleClick.bind(this, row)} style={{ cursor: 'pointer' }}>
+        <i onClick={() => handleDelete(row)} style={{ cursor: 'pointer' }}>
           <Delete></Delete>
         </i>,
         <i
@@ -112,31 +91,21 @@ export default function ServiceContainer(props) {
     },
   ];
 
-  const customStyles = {
-    rows: {
-      style: {
-        minHeight: '72px', // override the row height
-      },
-    },
-    headCells: {
-      style: {
-        paddingLeft: '8px', // override the cell padding for head cells
-        paddingRight: '8px',
-      },
-    },
-    cells: {
-      style: {
-        paddingLeft: '8px', // override the cell padding for data cells
-        paddingRight: '8px',
-      },
-    },
-  };
+  const handleDelete = row => {
+    console.log(row)
+    service.delete(`/Admin/Service/Delete/${row.Id}`).then(result => {
+      console.log(result)
+    })
+  }
 
+
+ 
   const [open, setOpen] = useState(false);
+  const [openForm, setOpenForm] = useState(false);
+
   const handleClickOpen = (row) => {
     console.log(row);
     setOpen(true);
-    setService(row);
   };
 
   const handleClose = () => {
@@ -186,7 +155,7 @@ export default function ServiceContainer(props) {
               highlightOnHover
               customStyles={customStyles}
             />
-
+            
             <Dialog
               open={open}
               onClose={handleClose}
@@ -198,11 +167,7 @@ export default function ServiceContainer(props) {
               </DialogTitle>
               <DialogContent>
                 <Box>
-                  <ServiceDetail
-                    code={selectedCode}
-                    picturePath={'user.picturePath'}
-                    service={service}
-                  />
+                  <ServiceDetail service={service}/>
                 </Box>
               </DialogContent>
               <DialogActions>
