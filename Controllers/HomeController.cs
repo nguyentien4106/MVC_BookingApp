@@ -1,4 +1,5 @@
 ﻿using BookingApp.Models;
+using BookingApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,16 +7,21 @@ namespace BookingApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IHomeService _service;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IHomeService service)
         {
-            _logger = logger;
+            _service = service;
         }
 
         public IActionResult Index()
         {
             return View();
+        }
+
+        public async Task<IActionResult> GetAll()
+        {
+            return Json(await  _service.GetAll());
         }
 
         public IActionResult Privacy()

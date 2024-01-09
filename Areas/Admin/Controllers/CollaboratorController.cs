@@ -19,14 +19,12 @@ namespace BookingApp.Areas.Admin.Controllers
         private readonly AppService<Collaborator, CollaboratorDTO> _service;
         private readonly AppService<BookingInformation, BookingInformationDTO> _bookingInformationService;
         private readonly IImageService _imageService;
-        private readonly IMapper _mapper;
 
         public CollaboratorController(IMapper mapper, ApplicationDbContext context, IImageService imageService)
         {
             _service = new AppService<Collaborator, CollaboratorDTO>(mapper, context);
             _bookingInformationService = new AppService<BookingInformation, BookingInformationDTO>(mapper, context);
             _imageService = imageService;
-            _mapper = mapper;
         }
 
         // GET: Admin/Collaborators
