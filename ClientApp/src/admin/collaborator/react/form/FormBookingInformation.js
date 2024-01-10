@@ -71,7 +71,7 @@ export default function FormBookingInformation({collaborator}) {
                     <label>Service Name</label>
                     <select className='form-control' onChange={onChangeNameService} value={item.ServiceId}>
                         {
-                            servicesAvailable.map(item => <option value={item.Id} key={item.Name}>{item.Name}</option>)
+                            servicesAvailable.length && servicesAvailable.map(item => <option value={item.Id} key={item.Name}>{item.Name}</option>)
                         }
                     </select>
                 </div>
@@ -117,7 +117,10 @@ export default function FormBookingInformation({collaborator}) {
             <div className='form-group d-flex flex-gap' style={{width: "50%"}}>
                 <div className='col-8 d-flex justify-content-between'>
                     <label>Services</label>
-                    <button className='btn btn-primary' onClick={() => setCollaboratorServices(prev => [...prev, {ServiceId: servicesAvailable[0].Id, Prices: 0, AdditionalInformation: servicesAvailable[0].Description, CollaboratorId: collaborator.Id}])}>+</button>
+                    <button className='btn btn-primary' onClick={() => setCollaboratorServices(prev => [...prev, {
+                        ServiceId: servicesAvailable.length ? servicesAvailable[0].Id : "", 
+                        Prices: 0,
+                        CollaboratorId: collaborator.Id}])}>+</button>
                 </div>
                 
             </div>

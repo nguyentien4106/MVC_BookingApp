@@ -142,7 +142,7 @@ export default function ServiceContainer() {
                           aria-describedby="alert-dialog-description"
                         >
                           <DialogTitle id="alert-dialog-title">
-                            {'ADd new Information'}
+                            {'New Service Information'}
                           </DialogTitle>
                           <DialogContent>
                             <Box>

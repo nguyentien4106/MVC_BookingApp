@@ -56,6 +56,8 @@ export const ServiceDetail = ({ item }) => {
                   >
                     Name
                   </Typography>
+              </Box>
+              <Box display="flex" alignItems="center" gap="0.5rem">
                 <Typography color={medium}>
                   <input
                     type="text"
@@ -66,7 +68,7 @@ export const ServiceDetail = ({ item }) => {
                 </Typography>
               </Box>
               <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
-              <Typography
+                <Typography
                     variant="h6"
                     color={dark}
                     fontWeight="500"
@@ -79,6 +81,8 @@ export const ServiceDetail = ({ item }) => {
                   >
                     Description
                   </Typography>
+              </Box>
+              <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
                 <Typography color={medium}>
                   <input
                     type="text"
@@ -107,10 +111,12 @@ export const ServiceDetail = ({ item }) => {
                 >
                   Name
                 </Typography>
+            </Box>
+            <Box display="flex" alignItems="center" gap="1rem">
               <Typography color={medium}>{editableService.Name}</Typography>
             </Box>
             <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
-            <Typography
+              <Typography
                   variant="h6"
                   color={dark}
                   fontWeight="500"
@@ -123,6 +129,8 @@ export const ServiceDetail = ({ item }) => {
                 >
                   Description
                 </Typography>
+            </Box>
+            <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
               <Typography color={medium}>{editableService.Description}</Typography>
             </Box>
           </Box>
