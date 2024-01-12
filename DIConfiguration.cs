@@ -1,4 +1,5 @@
-﻿using BookingApp.DTO;
+﻿using BookingApp.Areas.Admin.Services.CollaboratorService;
+using BookingApp.DTO;
 using BookingApp.Entities;
 using BookingApp.Service;
 using BookingApp.Services;
@@ -14,6 +15,7 @@ namespace BookingApp
             services.AddScoped<IAppService<BookingApp.Entities.Service, ServiceDTO>, AppService<BookingApp.Entities.Service, ServiceDTO>>();
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IHomeService, HomeService>();
+            services.AddScoped<ICollaboratorService, CollaboratorService>();
 
             return services;
         }

@@ -8,6 +8,7 @@ using BookingApp.Services.Implement;
 using BookingApp.Models.Result;
 using BookingApp.Services;
 using BookingApp.Entities.Base;
+using BookingApp.Areas.Admin.Services.CollaboratorService;
 
 namespace BookingApp.Areas.Admin.Controllers
 {
@@ -19,12 +20,14 @@ namespace BookingApp.Areas.Admin.Controllers
         private readonly AppService<Collaborator, CollaboratorDTO> _service;
         private readonly AppService<BookingInformation, BookingInformationDTO> _bookingInformationService;
         private readonly IImageService _imageService;
+        private readonly ICollaboratorService _collaboratorService;
 
-        public CollaboratorController(IMapper mapper, ApplicationDbContext context, IImageService imageService)
+        public CollaboratorController(IMapper mapper, ApplicationDbContext context, IImageService imageService, ICollaboratorService collaboratorService)
         {
             _service = new AppService<Collaborator, CollaboratorDTO>(mapper, context);
             _bookingInformationService = new AppService<BookingInformation, BookingInformationDTO>(mapper, context);
             _imageService = imageService;
+            _collaboratorService = collaboratorService;
         }
 
         // GET: Admin/Collaborators
@@ -64,7 +67,7 @@ namespace BookingApp.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromForm]CollaboratorDTO collaboratorDTO)
         {
-            var result = await _service.Add(collaboratorDTO);
+            var result = await _collaboratorService.Add(collaboratorDTO);
 
             return Json(result == null ? Result.Fail("The result return null.") : Result.Success(collaboratorDTO));
         }
@@ -82,7 +85,8 @@ namespace BookingApp.Areas.Admin.Controllers
                 return Json(Result.Fail("Collaborator is 000000000."));
             }
 
-            var result = await _service.Update(collaboratorDTO, identity: item => item.Code, item => item.Id == collaboratorDTO.Id);
+            var result = _collaboratorService.Update(collaboratorDTO);
+            //var result = await _service.Update(collaboratorDTO, identity: item => item.Code, item => item.Id == collaboratorDTO.Id);
             await _imageService.RemoveUserImagesById(collaboratorDTO.Id);
             await _imageService.AddImageToUser(collaboratorDTO.Id, collaboratorDTO.UserImages);
 

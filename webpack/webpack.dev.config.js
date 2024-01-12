@@ -7,7 +7,7 @@ const jsRootPath = path.join(projectRoot, 'wwwroot/js/admin')
 
 module.exports = {
     mode: "development",
-    devtool: 'inline-source-map',
+    devtool: 'source-map',
     entry: adminEntries,
     output: {
        publicPath: "/js/",

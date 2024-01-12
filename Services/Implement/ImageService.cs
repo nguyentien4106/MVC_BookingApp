@@ -98,5 +98,38 @@ namespace BookingApp.Services.Implement
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<MemoryStream> GetAvatars()
+        {
+            // Create a memory stream to hold the zip file contents
+            MemoryStream memoryStream = new();
+
+            // Create a zip archive
+            using (ZipArchive archive = new(memoryStream, ZipArchiveMode.Create, true))
+            {
+                var collaborators = await _context.Collaborators.ToListAsync();
+
+                // Retrieve images from the database
+                foreach(var collaborator in collaborators)
+                {
+                    var image = await _context.UserImages.Where(item => item.CollaboratorId == collaborator.Id).FirstOrDefaultAsync();
+
+                    if(image != null)
+                    {
+                        var entry = archive.CreateEntry($"{collaborator.Id}.jpeg");
+
+                        using (var entryStream = entry.Open())
+                        {
+                            entryStream.Write(image.Image, 0, image.Image.Length);
+                            //entryStream.
+                        }
+                    }
+                }
+            }
+
+            memoryStream.Position = 0;
+
+            return memoryStream;
+        }
     }
 }

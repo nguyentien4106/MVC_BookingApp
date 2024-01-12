@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BookingApp.Areas.Admin.Services.BookingInformation;
+using BookingApp.Areas.Admin.Services.CollaboratorService;
 using BookingApp.Data;
 using BookingApp.DTO;
 using BookingApp.Entities;
@@ -17,7 +18,6 @@ namespace BookingApp.Areas.Admin.Controllers
     public class BookingInformationController : Controller
     {
         private readonly IBookingInformationService _service;
-
         public BookingInformationController(IMapper mapper, ApplicationDbContext context)
         {
             _service = new BookingInformationService(mapper, context);

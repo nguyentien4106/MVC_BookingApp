@@ -19,9 +19,15 @@ namespace BookingApp.Controllers
             return View();
         }
 
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetCollaborators()
         {
-            return Json(await  _service.GetAll());
+            return Json(await _service.GetAll());
+        }
+
+        public async Task<IActionResult> GetAvatars()
+        {
+            var memoryStream = await _service.GetAvatar();
+            return new FileContentResult(memoryStream.ToArray(), "application/zip");
         }
 
         public IActionResult Privacy()

@@ -1,13 +1,14 @@
 import React from 'react'
 import ReactDOM from "react-dom/client";
+import BookingContainer from './BookingContainer';
+import '../css/index.scss'
 
- function App() {
-    console.log("Index")
-    
+function App() {
+
     return (
-        <div>
-        
-        </div>
+        <>
+            <BookingContainer></BookingContainer>
+        </>
     )
 }
 

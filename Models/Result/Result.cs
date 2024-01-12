@@ -5,6 +5,8 @@ namespace BookingApp.Models.Result
 {
     public class Result
     {
+        public Result() { }
+
         public Result(string message, bool isSuccessfully, object? data = null) 
         {
             Message = message;

@@ -9,5 +9,7 @@ namespace BookingApp.Services
         Task<bool> RemoveUserImagesById(Guid Id);
 
         Task<bool> AddImageToUser(Guid id, List<IFormFile> images);
+
+        Task<MemoryStream> GetAvatars();
     }
 }

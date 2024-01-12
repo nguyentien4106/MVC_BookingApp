@@ -1,5 +1,6 @@
 ﻿using BookingApp.Entities.Base;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Drawing;
 
 namespace BookingApp.Entities
 {
@@ -25,5 +26,7 @@ namespace BookingApp.Entities
 
         public BookingInformation? BookingInformation { get; set; }
 
+        [NotMapped]
+        public string? Avatar { get; set; }
     }
 }

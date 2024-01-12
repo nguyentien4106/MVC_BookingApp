@@ -22,11 +22,13 @@ function getImages(url){
         const files = zip.files
 
         const imageNames = Object.keys(files)
-        
         const images = []
         for(var imageName of imageNames){
             const f = await files[imageName].async("arraybuffer")
-            images.push(f)
+            images.push({
+                file: f,
+                name: imageName
+            })
         }
         return images
     });

@@ -16,12 +16,10 @@ export function FormGeneralInformation({ collaborator, setIsLoading }) {
   const [birthDate, setBirthDate] = useState(birthDateInit)
   const [services, setServices] = useState([])
 
-  console.log(collaborator)
-
   useEffect(() => {
     if(collaborator){
       service.getImages(`/Admin/Collaborator/GetUserImages/${collaborator.Id}`).then(response => {
-        const fileImages = response.map((item, idex) => new File([item], `image${idex}.jpeg`))
+        const fileImages = response.map((item, idex) => new File([item.file], `${item.name}.jpeg`))
         setPreviewImages(prev => [...prev, ...fileImages])
       })
     }

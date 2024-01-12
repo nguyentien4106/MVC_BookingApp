@@ -4,6 +4,7 @@ using BookingApp.Profile;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+using BookingApp.MiddleWare;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,8 +24,7 @@ builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
     options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
     options.SerializerSettings.ContractResolver = null;
-}
-);
+});
 
 builder.Services.AddAutoMapper(typeof(AppProfile));
 builder.Services.AddDependencyInjection();
@@ -45,7 +45,6 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -53,17 +52,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseMiddleware<GlobalExceptionHandler>();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-//app.MapControllerRoute(
-//    name: "Admin",
-//    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.UseEndpoints(endpoints =>
 {
