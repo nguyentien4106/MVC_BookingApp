@@ -13,8 +13,8 @@ using BookingApp.Areas.Admin.Services.CollaboratorService;
 namespace BookingApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    //[Authorize(Roles = "Admin")]
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
+    //[AllowAnonymous]
     public class CollaboratorController : Controller
     {
         private readonly AppService<Collaborator, CollaboratorDTO> _service;

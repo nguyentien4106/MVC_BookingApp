@@ -13,8 +13,8 @@ using Microsoft.EntityFrameworkCore;
 namespace BookingApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    //[Authorize(Roles = "Admin")]
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
+    //[AllowAnonymous]
     public class BookingInformationController : Controller
     {
         private readonly IBookingInformationService _service;

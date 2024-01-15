@@ -47,7 +47,7 @@ export default function CollaboratorCard({ collaborator }) {
   };
 
   const handleShowCollaboratorImages = id => {
-    service.getImages(`/Admin/Collaborator/GetUserImages/${id}`).then(response => {
+    service.getImages(`Home/GetUserImages/${id}`).then(response => {
       const fileImages = response.map((item, idex) => new File([item.file], `${item.name}.jpeg`))
       const images = fileImages.map(item => URL.createObjectURL(item))
       setUserImages(prev => [...prev, ...images])

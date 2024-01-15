@@ -16,7 +16,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 namespace BookingApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
+
+    //[AllowAnonymous]
     public class ServiceController : Controller
     {
         private readonly IAppService<BookingApp.Entities.Service, ServiceDTO> _service;

@@ -1,5 +1,7 @@
 ﻿using BookingApp.Models;
+using BookingApp.Models.Result;
 using BookingApp.Services;
+using BookingApp.Services.Implement;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -8,10 +10,11 @@ namespace BookingApp.Controllers
     public class HomeController : Controller
     {
         private readonly IHomeService _service;
-
-        public HomeController(IHomeService service)
+        private readonly IImageService _imageService;
+        public HomeController(IHomeService service, IImageService imageService)
         {
             _service = service;
+            _imageService = imageService;
         }
 
         public IActionResult Index()
@@ -30,9 +33,16 @@ namespace BookingApp.Controllers
             return new FileContentResult(memoryStream.ToArray(), "application/zip");
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> GetUserImages(Guid? id)
         {
-            return View();
+            if (id == null)
+            {
+                return Json(Result.Fail("Can not get the Collaborator Id."));
+            }
+
+            var memoryStream = await _imageService.GetUserImagesById((Guid)id);
+
+            return new FileContentResult(memoryStream.ToArray(), "application/zip");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

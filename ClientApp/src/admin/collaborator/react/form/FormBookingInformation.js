@@ -54,7 +54,6 @@ export default function FormBookingInformation({collaborator}) {
     }
 
     const serviceItem = (item, index) => {
-        console.log(item)
         const onChangeNameService = e => {
             setCollaboratorServices(prev => prev.map((item, idx) => index === idx ? Object.assign({}, item, { ServiceId: e.target.value}) : item))
         }

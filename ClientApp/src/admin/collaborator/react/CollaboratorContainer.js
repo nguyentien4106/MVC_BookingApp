@@ -105,20 +105,17 @@ export default function CollaboratorContainer(props) {
       action: () => {
         setCurrentAction(StatusAction.EditBookingInformation)
         setCollaborator(collaborator)
-        console.log('sửa thông tin Booking', collaborator)
       }
     },
     {
       name: "Xem chi tiết",
       action: () => {
         setCollaborator(collaborator)
-        console.log('xem chi tiết', collaborator)
       }
     },
     {
       name: "Xoá CTV",
       action: () => {
-        console.log('Xoá CTV', collaborator)
         handleDelete(collaborator)
       }
     },
@@ -127,7 +124,6 @@ export default function CollaboratorContainer(props) {
   useEffect(() => {
     setIsLoading(true)
     service.get('/Admin/Collaborator/getall').then((response) => {
-      console.log(response);
       setIsLoading(false)
       setCollaborators(response.Data);
     });

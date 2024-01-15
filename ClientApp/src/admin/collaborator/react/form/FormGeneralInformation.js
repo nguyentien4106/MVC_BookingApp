@@ -78,7 +78,6 @@ export function FormGeneralInformation({ collaborator, setIsLoading }) {
     const {
       target: { value },
     } = event;
-    console.log(value)
     setServices(
       typeof value === 'string' ? value.split(',') : value,
     );

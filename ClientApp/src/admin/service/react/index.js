@@ -6,7 +6,6 @@ import 'react-notifications-component/dist/theme.css';
 import ServiceContainer from './ServiceContainer';
 
 function App() {
-  console.log('app')
   return (
     <>
       <ReactNotifications />
