@@ -38,8 +38,11 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         @{
-                            var role = User.IsInRole("Admin");
-                            if (role)
+                            var isAdmin = User.IsInRole("Admin");
+                            var isCollaborator = User.IsInRole("Collaborator");
+                            var isNormalUser = User.IsInRole("User");
+
+                            if (isAdmin || isCollaborator)
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="Admin" asp-controller="Collaborator" asp-action="Index">Collaborator</a>

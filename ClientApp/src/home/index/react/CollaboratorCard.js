@@ -72,7 +72,7 @@ export default function CollaboratorCard({ collaborator }) {
         alt={fullName}
         onClick={() => handleShowCollaboratorImages(collaborator.Id)}
       />
-      <CardContent>
+      <CardContent onClick={handleExpandClick}>
         <Typography variant="body2" color="text.secondary">
           Biệt danh: {
             BookingInformation.DisplayName ?? "Chưa có"

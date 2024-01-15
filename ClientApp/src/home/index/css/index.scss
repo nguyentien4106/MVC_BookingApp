@@ -8,3 +8,21 @@
 .grid-item {
     display: inline-grid;
 }
+
+@media all and (max-width: 1000px) {
+    .grid-container {
+        display: grid;
+        grid-template-columns: auto auto auto;
+        column-gap: 20px;
+        row-gap: 10px;
+    }
+}
+
+@media all and (max-width: 768px) {
+    .grid-container {
+        display: grid;
+        grid-template-columns: auto auto;
+        column-gap: 20px;
+        row-gap: 10px;
+    }
+}
