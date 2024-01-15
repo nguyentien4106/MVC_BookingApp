@@ -60445,7 +60445,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function App() {
-  console.log('app');
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.Fragment, {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_notifications_component__WEBPACK_IMPORTED_MODULE_3__.ReactNotifications, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_ServiceContainer__WEBPACK_IMPORTED_MODULE_5__["default"], {})]
   });

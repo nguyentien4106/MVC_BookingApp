@@ -38,7 +38,7 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 80%;
+  width: 100%;
   height: 100%;
   background: #333;
   opacity: 0.5;
@@ -48,7 +48,7 @@ body {
 .blockUI__inner{
   text-align: center;
   position: absolute;
-  width: 80%;
+  width: 10%;
   top: 45%;
   left: 50%;
   z-index: 9999;
