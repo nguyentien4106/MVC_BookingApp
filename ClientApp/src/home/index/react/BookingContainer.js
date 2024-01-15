@@ -5,18 +5,18 @@ export default function BookingContainer() {
     const [avatars, setAvatars] = useState(null)
     const [collaborators, setCollaborators] = useState([])
     
-    useEffect(async () => {
+    useEffect(() => {
         const getImages = async () => {
             service.getImages('/Home/GetAvatars').then(images => { 
                 setAvatars(images.map(item => new File([item.file], `${item.name}`)))
             })
         }
-        await getImages();
+        getImages();
     }, [])
 
     useEffect(() => {
         if(!avatars) return
-
+        console.log(avatars)
         service.get("/Home/GetCollaborators").then(response => {
             response.Data.map(collaborator => {
                 collaborator.Avatar = avatars.find(avatar => avatar.name.includes(collaborator.Id))
@@ -33,6 +33,7 @@ export default function BookingContainer() {
                 {
                     collaborators && collaborators.map(collaborator => <div className='grid-item' key={collaborator.Id}><CollaboratorCard collaborator={collaborator} /></div>)
                 }
+                
             </div>
         </div>
     )

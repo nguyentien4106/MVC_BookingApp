@@ -47,5 +47,6 @@ namespace BookingApp.DTO
         public int? Status { get; set; }
 
         public string? Information { get; set; }
+
     }
 }

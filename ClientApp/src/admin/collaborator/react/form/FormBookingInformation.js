@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { service } from '../../../../service';
 import { notify } from '../../../../helpers/functionHelper';
 import { Store } from 'react-notifications-component';
+import CurrencyInput from 'react-currency-input-field';
 
 export default function FormBookingInformation({collaborator}) {
     const [displayName, setDisplayName] = useState("")
@@ -53,12 +54,13 @@ export default function FormBookingInformation({collaborator}) {
     }
 
     const serviceItem = (item, index) => {
+        console.log(item)
         const onChangeNameService = e => {
-            setCollaboratorServices(prev => prev.map((item, idx) => index === idx ? Object.assign({}, item, { ServiceId:  e.target.value}) : item))
+            setCollaboratorServices(prev => prev.map((item, idx) => index === idx ? Object.assign({}, item, { ServiceId: e.target.value}) : item))
         }
 
-        const onChangePriceService = e => {
-            setCollaboratorServices(prev => prev.map((item, idx) => index === idx ? Object.assign({}, item, { Prices:  e.target.value}) : item))
+        const onChangePriceService = (value, name, values) => {
+            setCollaboratorServices(prev => prev.map((item, idx) => index === idx ? Object.assign({}, item, { Prices: value}) : item))
         }
 
         const onDeleteService = e => {
@@ -69,15 +71,15 @@ export default function FormBookingInformation({collaborator}) {
             <div key={item.Name} className='form-group d-flex flex-gap' style={{width: "50%"}}>
                 <div className='col-6'>
                     <label>Service Name</label>
-                    <select className='form-control' onChange={onChangeNameService} value={item.ServiceId}>
+                    <select className='form-control' onChange={onChangeNameService} value={item.ServiceId ? item.ServiceId : ""}>
                         {
-                            servicesAvailable.length && servicesAvailable.map(item => <option value={item.Id} key={item.Name}>{item.Name}</option>)
+                            servicesAvailable.length && servicesAvailable.map(item => <option value={item.Id} key={item.Id}>{item.Name}</option>)
                         }
                     </select>
                 </div>
                 <div className='col-6'>
                     <label>Price</label>
-                    <input type='number' className='form-control' onChange={onChangePriceService} value={item.Prices}></input>
+                    <CurrencyInput className='form-control' onValueChange={onChangePriceService} value={item.Prices} defaultValue={item.Prices} suffix=' VND' ></CurrencyInput>
                 </div>
                 <div className='col-1 d-flex flex-column'>
                     <label>Delete</label>
@@ -89,7 +91,7 @@ export default function FormBookingInformation({collaborator}) {
     }
 
     return (
-        <div key={`booking-information-form`}>
+        <div key={`booking-information-form ${collaborator.Id}`}>
             <h4>{`Thông tin booking của ${collaborator.FirstName} ${collaborator.LastName} - ${collaborator.Code}`}</h4>
             <br></br>
             <hr/>

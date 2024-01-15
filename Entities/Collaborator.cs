@@ -26,7 +26,5 @@ namespace BookingApp.Entities
 
         public BookingInformation? BookingInformation { get; set; }
 
-        [NotMapped]
-        public string? Avatar { get; set; }
     }
 }

@@ -41,16 +41,16 @@ namespace BookingApp.Areas.Admin.Controllers
         // GET: Admin/Collaborators
         public async Task<IActionResult> GetAll()
         {
-            var collaborators = await _service.GetAll(null, "BookingInformation");
+            var collaborators = await _service.GetAll();
             return Json(Result.Success(collaborators));
         }
 
-        public async Task<IActionResult> GetBookingInformation(Guid? id)
-        {
-            var result = await _bookingInformationService.GetById(m => m.CollaboratorId == id, "Services");
+        //public async Task<IActionResult> GetBookingInformation(Guid? id)
+        //{
+        //    var result = await _bookingInformationService.GetById(m => m.CollaboratorId == id, "CollaboratorServices");
 
-            return Json(result == null ? Result.Fail("The result return null.") : Result.Success(result));
-        }
+        //    return Json(result == null ? Result.Fail("The result return null.") : Result.Success(result));
+        //}
 
         public async Task<IActionResult> GetUserImages(Guid? id)
         {
@@ -85,10 +85,7 @@ namespace BookingApp.Areas.Admin.Controllers
                 return Json(Result.Fail("Collaborator is 000000000."));
             }
 
-            var result = _collaboratorService.Update(collaboratorDTO);
-            //var result = await _service.Update(collaboratorDTO, identity: item => item.Code, item => item.Id == collaboratorDTO.Id);
-            await _imageService.RemoveUserImagesById(collaboratorDTO.Id);
-            await _imageService.AddImageToUser(collaboratorDTO.Id, collaboratorDTO.UserImages);
+            var result = await _collaboratorService.Update(collaboratorDTO);
 
             return Json(Result.Success(result));
 

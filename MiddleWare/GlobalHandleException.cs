@@ -28,12 +28,17 @@ namespace BookingApp.MiddleWare
             }
         }
 
+        private string GetMessage(Exception exception)
+        {
+            return exception.Message.Contains("inner exception") ? GetMessage(exception.InnerException) : exception.Message;
+        }
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
             var response = context.Response;
             var innerException = exception.InnerException;
-            var error = Result.Fail(innerException != null ? innerException.Message : exception.Message);
+            
+            var error = Result.Fail(GetMessage(exception));
 
             switch (exception)
             {
