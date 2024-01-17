@@ -1,4 +1,5 @@
-﻿using BookingApp.Models;
+﻿using BookingApp.DTO.Home;
+using BookingApp.Models;
 using BookingApp.Models.Result;
 using BookingApp.Services;
 using BookingApp.Services.Implement;
@@ -43,6 +44,19 @@ namespace BookingApp.Controllers
             var memoryStream = await _imageService.GetUserImagesById((Guid)id);
 
             return new FileContentResult(memoryStream.ToArray(), "application/zip");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Filters([FromBody] FilterModel model)
+        {
+            if(model == null)
+            {
+                return Json(Result.Fail("Không hợp lệ!"));
+            }
+
+            var result = await _service.Filters(model);
+
+            return Json(result);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

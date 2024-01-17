@@ -10,6 +10,7 @@ export default function FormBookingInformation({collaborator}) {
     const [status, setStatus] = useState(1)
     const [collaboratorServices, setCollaboratorServices] = useState([])
     const [servicesAvailable, setServicesAvailable] = useState([])
+    const StatusReady = 1;
 
     useEffect(() => {
         service.get('/Admin/Service/GetAll').then(rs => {
@@ -20,12 +21,13 @@ export default function FormBookingInformation({collaborator}) {
     useEffect(() => {
         service.get(`/Admin/BookingInformation/GetByCollaborator/${collaborator.Id}`).then(rs => {
             const { DisplayName, Information, Status, CollaboratorServices } = rs.Data
-            setDisplayName(DisplayName)
-            setInformation(Information)
-            setCollaboratorServices(CollaboratorServices)
-            setStatus(Status)
+            setDisplayName(DisplayName ? DisplayName : "")
+            setInformation(Information ? Information : "")
+            setCollaboratorServices(CollaboratorServices ? CollaboratorServices : [])
+            setStatus(Status ? Status : StatusReady)
         })
     }, [])
+    
     const onSubmit = (e) => {
         if(validateAll()){
             service.post("/Admin/BookingInformation/Add", {
@@ -54,6 +56,7 @@ export default function FormBookingInformation({collaborator}) {
     }
 
     const serviceItem = (item, index) => {
+        console.log(item)
         const onChangeNameService = e => {
             setCollaboratorServices(prev => prev.map((item, idx) => index === idx ? Object.assign({}, item, { ServiceId: e.target.value}) : item))
         }

@@ -19,6 +19,7 @@ import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 import { Dialog } from '@mui/material';
 import MuiImageSlider from 'mui-image-slider';
 import { service } from '../../../service';
+import TelegramIcon from '@mui/icons-material/Telegram';
 
 const getAge = born => {
   return moment().diff(moment(born), 'years');
@@ -90,13 +91,13 @@ export default function CollaboratorCard({ collaborator }) {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
+        <IconButton aria-label="go to zalo" href='https://zalo.me/0359811663' target='_blank'>
           <CallIcon />
         </IconButton>
-        <IconButton aria-label="share">
-          <Typography>{ContactNumber}</Typography>
+        <IconButton aria-label="go to telegrams" href='https://t.me/walternguyen' target='_blank'>
+          <TelegramIcon />
         </IconButton>
-        <IconButton aria-label="share" onClick={() => handleShowCollaboratorImages(collaborator.Id)}>
+        <IconButton aria-label="see images" onClick={() => handleShowCollaboratorImages(collaborator.Id)}>
           <PhotoLibraryIcon ></PhotoLibraryIcon>
         </IconButton>
         <ExpandMore
@@ -111,19 +112,14 @@ export default function CollaboratorCard({ collaborator }) {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
         <Typography paragraph> * Số đo: {`V1 - V2 - V3: ${collaborator.V1} - ${collaborator.V2} - ${collaborator.V3}`}</Typography>
-          {/* <Typography paragraph>{`V1 - V2 - V3: ${collaborator.V1} - ${collaborator.V2} - ${collaborator.V3}`}</Typography> */}
           <Typography paragraph> * Dịch vụ:</Typography>
             {
               BookingInformation.CollaboratorServices && BookingInformation.CollaboratorServices.map(service => <Typography key={service.Id} paragraph>{service.Service.Name}: {service.Prices} VND</Typography>)
             }
           <Typography paragraph> * Địa chỉ: {collaborator.Address}</Typography>
-          {/* <Typography paragraph>{collaborator.Address}</Typography> */}
           <Typography paragraph> * Mô tả: {collaborator.Description}</Typography>
-          {/* <Typography paragraph>{collaborator.Description}</Typography> */}
           <Typography paragraph> * Sở thích: </Typography>
-          {/* <Typography paragraph>{collaborator.Hobbies}</Typography> */}
           <Typography paragraph> * Trường: {collaborator.School}</Typography>
-          {/* <Typography paragraph>{collaborator.School}</Typography> */}
         </CardContent>
       </Collapse>
 
