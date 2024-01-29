@@ -1,4 +1,4 @@
-﻿using BookingApp.DTO.Home;
+﻿using BookingApp.Models.DTO.Home;
 using BookingApp.Models.Result;
 using BookingApp.Models.ViewModel;
 
@@ -11,7 +11,5 @@ namespace BookingApp.Services
         Task<MemoryStream> GetAvatar();
 
         Task<Result> Filters(FilterModel model);
-
-        Task<FilterViewModel> GetFilterModel(); 
     }
 }

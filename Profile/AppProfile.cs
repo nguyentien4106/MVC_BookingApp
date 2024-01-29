@@ -1,11 +1,6 @@
-﻿using AutoMapper;
-using BookingApp.DTO;
-using BookingApp.Entities;
-using BookingApp.Entities.Base;
-using BookingApp.Models.Enum;
+﻿using BookingApp.Common.Entities;
+using BookingApp.Models.DTO;
 using BookingApp.Profile.Converter;
-using Microsoft.VisualBasic;
-using System.Collections;
 
 namespace BookingApp.Profile
 {
@@ -13,7 +8,7 @@ namespace BookingApp.Profile
     {
         public AppProfile()
         {
-            CreateMap<Collaborator, CollaboratorDTO>()
+            CreateMap<Collaborator, CollaboratorViewModel>()
                 .ForMember(item => item.UserImages, opt =>
                 {
                     opt.MapFrom(item => item.UserImages);
@@ -30,7 +25,7 @@ namespace BookingApp.Profile
                 .ForMember(item => item.Information, opt => opt.MapFrom(src => src.BookingInformation.Information))
                 ;
 
-            CreateMap<CollaboratorDTO, Collaborator>()
+            CreateMap<CollaboratorViewModel, Collaborator>()
                 .ForMember(item => item.UserImages, opt =>
                 {
                     opt.MapFrom(item => item.UserImages);
@@ -54,13 +49,13 @@ namespace BookingApp.Profile
                 ;
 
 
-            CreateMap<BookingApp.Entities.Service, ServiceDTO>().ReverseMap();
-            CreateMap<BookingApp.Entities.CollaboratorServices, CollaboratorServicesDTO>();
-            CreateMap<CollaboratorServicesDTO, CollaboratorServices>()
+            CreateMap<Service, ServiceDTO>().ReverseMap();
+            CreateMap<CollaboratorServices, CollaboratorServicesViewModel>();
+            CreateMap<CollaboratorServicesViewModel, CollaboratorServices>()
                 .ForMember(item => item.Collaborator, opt=> opt.Ignore())
                 .ForMember(item => item.Service, opt=> opt.Ignore())
                 ;
-            CreateMap<BookingApp.Entities.BookingInformation, BookingInformationDTO>().ReverseMap();
+            CreateMap<BookingInformation, BookingInformationViewModel>().ReverseMap();
         }
     }
 }

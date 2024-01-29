@@ -3,7 +3,7 @@ const projectRoot = path.resolve(__dirname, '../');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin'); // installed via npm
 const adminEntries = require("./untils")
 
-const jsRootPath = path.join(projectRoot, 'wwwroot/js/admin')
+const jsRootPath = path.join(projectRoot, 'wwwroot/js')
 
 module.exports = {
     mode: "development",

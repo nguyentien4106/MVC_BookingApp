@@ -8,18 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Areas\Admin\Data\**" />
-    <Compile Remove="Areas\Admin\Models\**" />
-    <Compile Remove="Data\Migrations\**" />
-    <Content Remove="Areas\Admin\Data\**" />
-    <Content Remove="Areas\Admin\Models\**" />
-    <Content Remove="Data\Migrations\**" />
-    <EmbeddedResource Remove="Areas\Admin\Data\**" />
-    <EmbeddedResource Remove="Areas\Admin\Models\**" />
-    <EmbeddedResource Remove="Data\Migrations\**" />
-    <None Remove="Areas\Admin\Data\**" />
-    <None Remove="Areas\Admin\Models\**" />
-    <None Remove="Data\Migrations\**" />
+    <!--<Compile Remove="Areas\Admin\Data\**" />-->
+    <!--<Compile Remove="Areas\Admin\Models\**" />-->
+    <Compile Remove="BookingApp.Admin\**" />
+    <Compile Remove="BookingApp.Common\**" />
+    <Content Remove="BookingApp.Admin\**" />
+    <Content Remove="BookingApp.Common\**" />
+    <!--<Content Remove="Areas\Admin\Data\**" />-->
+    <!--<Content Remove="Areas\Admin\Models\**" />-->
+    <EmbeddedResource Remove="BookingApp.Admin\**" />
+    <EmbeddedResource Remove="BookingApp.Common\**" />
+    <!--<EmbeddedResource Remove="Areas\Admin\Data\**" />-->
+    <!--<EmbeddedResource Remove="Areas\Admin\Models\**" />-->
+    <None Remove="BookingApp.Admin\**" />
+    <None Remove="BookingApp.Common\**" />
+    <!--<None Remove="Areas\Admin\Data\**" />
+    <None Remove="Areas\Admin\Models\**" />-->
   </ItemGroup>
 
   <ItemGroup>
@@ -39,4 +43,12 @@
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="BookingApp.Admin\BookingApp.Admin.csproj" />
+    <ProjectReference Include="BookingApp.Common\BookingApp.Common.csproj" />
+  </ItemGroup>
+	
+  <!--<ItemGroup>
+    <ProjectReference Include="..\BookingApp.Admin\BookingApp.Admin.csproj" />
+  </ItemGroup>-->
 </Project>

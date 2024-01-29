@@ -1,8 +1,8 @@
-﻿using BookingApp.DTO.Home;
+﻿using BookingApp.Common.Services;
 using BookingApp.Models;
+using BookingApp.Models.DTO.Home;
 using BookingApp.Models.Result;
 using BookingApp.Services;
-using BookingApp.Services.Implement;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

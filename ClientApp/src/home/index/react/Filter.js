@@ -11,18 +11,19 @@ export default function Filter({ filterParams, onSetFilterParams }) {
     const [province, setProvince] = useState(filterParams.Province)
     const [districts, setDistricts] = useState([{district_name: "All", district_id: -1}])
     const [district, setDicstict] = useState(filterParams.DistrictName)
-    console.log(filterParams)
-    const [fromAge, setFromAge] = useState(filterParams.FromAge)
-    const [toAge, setToAge] = useState(filterParams.ToAge)
-    const [value, setValue] = React.useState([17, 37]);
+    const [ages, setAges] = React.useState([filterParams.FromAge, filterParams.ToAge]);
 
-    const handleChange = (event, newValue) => {
-      setValue(newValue);
+    const handleChange = (event, ages) => {
+        setAges(ages)
+        onSetFilterParams(prev => Object.assign({}, filterParams, {
+            FromAge: ages[0],
+            ToAge: ages[1],
+            isSubmit: false
+        }))
     };
 
     useEffect(() => {
         if(province.province_id === -1) return
-
         service.get(`https://vapi.vnappmob.com/api/province/district/${province}`).then(rs => {
             const { results } = rs
             results.unshift({district_name: "All", district_id: -1})
@@ -32,17 +33,12 @@ export default function Filter({ filterParams, onSetFilterParams }) {
 
 
     const handleSearch = () => {
-        if(fromAge > toAge){
-            notify(Store, false, "Khoảng tuổi không hợp lệ!")
-            return
-        }
-        
         onSetFilterParams(prev => Object.assign({}, filterParams, {
             Province: province,
             ProvinceName: Provinces.find(prov => prov.province_id === province)?.province_name ?? 'All',
             DistrictName: district,
-            FromAge: fromAge,
-            ToAge: toAge,
+            FromAge: ages[0],
+            ToAge: ages[1],
             isSubmit: true
         }))
     }
@@ -53,10 +49,10 @@ export default function Filter({ filterParams, onSetFilterParams }) {
         <div className="filter-container">
             <div className="row">
                 <div className="col-3">
-                    <div className="mb-3 row">
-                        <label htmlFor="province" className="col-sm-2 col-form-label">Quận</label>
+                    <div className="mb-3 row center">
+                    <label htmlFor="province" className="col-sm-2 col-form-label">Quận</label>
                         <div className="col-sm-10 align-self-center">
-                            <select className='col-sm-8' value={province} onChange={(e) => setProvince(e.target.value)} htmlFor="province">
+                            <select className='col-sm-8 button-search' value={province} onChange={(e) => setProvince(e.target.value)} htmlFor="province">
                                 <option value={-1}>All</option>
                                 {
                                     Provinces.map(prov => <option value={prov.province_id} key={prov.province_id}>{prov.province_name}</option>)
@@ -66,10 +62,10 @@ export default function Filter({ filterParams, onSetFilterParams }) {
                     </div>
                 </div>
                 <div className="col-3">
-                    <div className="mb-3 row">
+                    <div className="mb-3 row center">
                         <label htmlFor="district" className="col-sm-2 col-form-label">Huyện</label>
                         <div className="col-sm-10 align-self-center">
-                            <select className='col-sm-8' value={district.district_name} onChange={(e) => setDicstict(e.target.value)} htmlFor="district">
+                            <select className='col-sm-10 button-search' value={district.district_name} onChange={(e) => setDicstict(e.target.value)} htmlFor="district">
                                 {
                                     districts && districts.map(prov => <option value={prov.district_name} key={prov.district_name}>{prov.district_name}</option>)
                                 }
@@ -78,42 +74,28 @@ export default function Filter({ filterParams, onSetFilterParams }) {
                     </div>
                 </div>
                 <div className="col-3">
-                    {/* <div className="mb-3 row">
-                        <label htmlFor="age" className="col-sm-2 col-form-label">Tuổi</label>
-                        <div className="col-sm-10 align-self-center">
-                            <select className='col-sm-3' value={fromAge} onChange={(e) => setFromAge(+e.target.value)}>
-                                {
-                                    Array.from({length: 36}, (_, i) => i).map(item => <option value={item} key={item}>{item}</option>)
-                                }
-                            </select>
-                            <label>-</label>
-                            <select className='col-sm-3' value={toAge} onChange={(e) => setToAge(+e.target.value)} >
-                                {
-                                    Array.from({length: 36}, (_, i) => i).map(item => <option value={item} key={item}>{item}</option>)
-                                }
-                            </select>
-                        </div>
-                    </div> */}
-                    <div className='relative'>
-                        <button className='button-search' onClick={() => setIsShow(!isShow)}>Age</button>
+                    <div className='relative mb-3 row center'>
+                        <button className='button-search' onClick={() => setIsShow(!isShow)}>Độ tuổi</button>
                         <div>
                         {
-                            isShow && <Box sx={{ width: 300 }}>
+                            isShow && 
+                                <div className='absolute select-age'>
+                                    <Box sx={{ width: 300 }}>
                                         <Slider
                                             getAriaLabel={() => 'Temperature range'}
-                                            value={value}
+                                            value={ages}
                                             onChange={handleChange}
                                             valueLabelDisplay="auto"
                                         />
                                     </Box>
+                                </div>
                         }
                         </div>
                     </div>
                 </div>
                 <div className="col-3">
-                    <button className='btn btn-primary' onClick={handleSearch}>Tìm kiếm</button>
+                    <button className='button-search pink' onClick={handleSearch}>Tìm kiếm</button>
                 </div>
-                
             </div>
            
         </div>

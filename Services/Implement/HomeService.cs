@@ -1,6 +1,6 @@
 ﻿using BookingApp.Data;
-using BookingApp.DTO.Home;
 using BookingApp.Entities;
+using BookingApp.Models.DTO.Home;
 using BookingApp.Models.Enum;
 using BookingApp.Models.Result;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +28,7 @@ namespace BookingApp.Services.Implement
                 .ToListAsync();
 
             var filterByAge = collaborators.Where(item => FilterByAge(model, item));
-            var filterByAddress = collaborators.Where(item => FilterByAddress(model, item));
+            var filterByAddress = filterByAge.Where(item => FilterByAddress(model, item));
             return Result.Success(filterByAddress);
         }
 

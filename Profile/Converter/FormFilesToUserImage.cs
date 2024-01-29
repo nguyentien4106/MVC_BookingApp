@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BookingApp.Entities.Base;
+using BookingApp.Common.Entities.Base;
 
 namespace BookingApp.Profile.Converter
 {
@@ -16,7 +16,7 @@ namespace BookingApp.Profile.Converter
                     using var ms = new MemoryStream();
 
                     file.CopyTo(ms);
-                    result.Add(new Entities.Base.UserImage
+                    result.Add(new UserImage
                     {
                         Image = ms.ToArray(),
                         Name = file.Name,
