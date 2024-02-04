@@ -41,7 +41,8 @@ builder.Services.AddMvc(setup =>
 {
     options.JsonSerializerOptions.PropertyNamingPolicy = null;
 });
-builder.Services.AddMvcCore().AddCors().AddApplicationPart(Assembly.Load(new AssemblyName("BookingApp.Admin")));
+
+builder.Services.AddControllers().AddApplicationPart(Assembly.Load(new AssemblyName("BookingApp.Admin")));
 
 var app = builder.Build();
 

@@ -7,7 +7,7 @@ const jsRootPath = path.join(projectRoot, 'wwwroot/js/admin')
 
 module.exports = {
     mode: "development",
-    devtool: 'eval-source-map',
+    devtool: 'source-map',
     entry: adminEntries,
     output: {
        publicPath: "/js/",
@@ -48,8 +48,8 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.jsx'] // Add '.jsx' extension for React components
     },
-    optimization: {
-        runtimeChunk: 'single',
-        moduleIds: 'deterministic'
-    }
+    //optimization: {
+    //    runtimeChunk: 'single',
+    //    moduleIds: 'deterministic'
+    //}
 };
