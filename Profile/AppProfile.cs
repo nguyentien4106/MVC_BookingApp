@@ -1,4 +1,6 @@
-﻿using BookingApp.Common.Entities;
+﻿using BookingApp.Admin.Model.DTO;
+using BookingApp.Common.Entities;
+using BookingApp.Common.Model.DTO;
 using BookingApp.Models.DTO;
 using BookingApp.Profile.Converter;
 
@@ -8,7 +10,7 @@ namespace BookingApp.Profile
     {
         public AppProfile()
         {
-            CreateMap<Collaborator, CollaboratorViewModel>()
+            CreateMap<Collaborator, CollaboratorDTO>()
                 .ForMember(item => item.UserImages, opt =>
                 {
                     opt.MapFrom(item => item.UserImages);
@@ -25,7 +27,7 @@ namespace BookingApp.Profile
                 .ForMember(item => item.Information, opt => opt.MapFrom(src => src.BookingInformation.Information))
                 ;
 
-            CreateMap<CollaboratorViewModel, Collaborator>()
+            CreateMap<CollaboratorDTO, Collaborator>()
                 .ForMember(item => item.UserImages, opt =>
                 {
                     opt.MapFrom(item => item.UserImages);
@@ -55,7 +57,7 @@ namespace BookingApp.Profile
                 .ForMember(item => item.Collaborator, opt=> opt.Ignore())
                 .ForMember(item => item.Service, opt=> opt.Ignore())
                 ;
-            CreateMap<BookingInformation, BookingInformationViewModel>().ReverseMap();
+            CreateMap<BookingInformation, BookingInformationDTO>().ReverseMap();
         }
     }
 }

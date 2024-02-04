@@ -1,4 +1,5 @@
 ﻿using BookingApp.Admin.ViewModels;
+using BookingApp.Common.Model.DTO;
 
 namespace BookingApp.Models.DTO
 {

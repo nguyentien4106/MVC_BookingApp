@@ -1,4 +1,4 @@
-﻿using BookingApp.Models.Result;
+﻿using BookingApp.Common.Model.Result;
 using System.Net;
 using System.Text.Json;
 

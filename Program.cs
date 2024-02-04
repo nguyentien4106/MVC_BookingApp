@@ -1,10 +1,11 @@
 using BookingApp;
-using BookingApp.Data;
 using BookingApp.Profile;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using BookingApp.MiddleWare;
+using BookingApp.Common.Data;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,13 +34,15 @@ builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
 
 builder.Services.AddAutoMapper(typeof(AppProfile));
 builder.Services.AddDependencyInjection();
-builder.Services.AddMvc( setup =>
+builder.Services.AddMvc(setup =>
 {
     setup.EnableEndpointRouting = false;
 }).AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.PropertyNamingPolicy = null;
 });
+builder.Services.AddMvcCore().AddCors().AddApplicationPart(Assembly.Load(new AssemblyName("BookingApp.Admin")));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

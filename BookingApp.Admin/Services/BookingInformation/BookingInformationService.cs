@@ -4,6 +4,7 @@ using BookingApp.Common.Services.Implement;
 using BookingApp.Common.Data;
 using BookingApp.Common.Model.Result;
 using BookingApp.Admin.ViewModels;
+using BookingApp.Admin.Model.DTO;
 
 namespace BookingApp.Admin.Services.BookingInformation
 {
@@ -18,7 +19,7 @@ namespace BookingApp.Admin.Services.BookingInformation
             _context = context;
         }
 
-        public async Task<Result> AddOrUpdate(BookingInformationViewModel dto)
+        public async Task<Result> AddOrUpdate(BookingInformationDTO dto)
         {
             var booking = await _context.BookingInformations.Where(item => item.CollaboratorId == dto.CollaboratorId).FirstOrDefaultAsync();
 

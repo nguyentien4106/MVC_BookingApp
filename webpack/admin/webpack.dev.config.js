@@ -1,13 +1,13 @@
 const path = require('path');
-const projectRoot = path.resolve(__dirname, '../');
+const projectRoot = path.resolve(__dirname, '../../');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin'); // installed via npm
 const adminEntries = require("./untils")
 
-const jsRootPath = path.join(projectRoot, 'wwwroot/js')
+const jsRootPath = path.join(projectRoot, 'wwwroot/js/admin')
 
 module.exports = {
     mode: "development",
-    devtool: 'source-map',
+    devtool: 'eval-source-map',
     entry: adminEntries,
     output: {
        publicPath: "/js/",
@@ -16,7 +16,7 @@ module.exports = {
     },
     module: {
         rules: [{
-            test: /\.js$|jsx/,
+            test: /\.(js|jsx)$/,
             exclude: /node_modules/,
             use: ['babel-loader']
         },
@@ -45,4 +45,11 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin({ cache: false }),
     ],
+    resolve: {
+        extensions: ['.js', '.jsx'] // Add '.jsx' extension for React components
+    },
+    optimization: {
+        runtimeChunk: 'single',
+        moduleIds: 'deterministic'
+    }
 };

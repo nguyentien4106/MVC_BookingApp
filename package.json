@@ -22,9 +22,14 @@
     "webpack-cli": "^5.1.4"
   },
   "scripts": {
-    "build-dev": "webpack -c ./webpack/webpack.dev.config.js ",
-    "build-pro": "webpack -c ./webpack/webpack.pro.config.js",
-    "start": "webpack-dev-server --mode development"
+    "admin-build-dev": "webpack -c ./webpack/admin/webpack.dev.config.js",
+    "admin-build-pro": "webpack -c ./webpack/admin/webpack.pro.config.js",
+    "collaborator-build-dev": "webpack -c ./webpack/collaborator/webpack.dev.config.js",
+    "collaborator-build-pro": "webpack -c ./webpack/collaborator/webpack.pro.config.js",
+    "home-build-dev": "webpack -c ./webpack/home/webpack.dev.config.js",
+    "home-build-pro": "webpack -c ./webpack/home/webpack.pro.config.js",
+    "start": "webpack-dev-server --mode development",
+    "build-dev": "webpack -c ./webpack/admin/webpack.dev.config.js && webpack -c ./webpack/home/webpack.dev.config.js && webpack -c ./webpack/collaborator/webpack.dev.config.js"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

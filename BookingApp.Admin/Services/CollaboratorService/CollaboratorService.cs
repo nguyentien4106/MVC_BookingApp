@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BookingApp.Admin.Model.DTO;
 using BookingApp.Admin.ViewModels;
 using BookingApp.Common.Data;
 using BookingApp.Common.Entities;
@@ -21,7 +22,7 @@ namespace BookingApp.Admin.Services.CollaboratorService
             _imageService = imageService;
         }
 
-        public async Task<Result> Add(CollaboratorViewModel dto)
+        public async Task<Result> Add(CollaboratorDTO dto)
         {
             var entity = _mapper.Map<Collaborator>(dto);
             _context.Add(entity);
@@ -36,7 +37,7 @@ namespace BookingApp.Admin.Services.CollaboratorService
             return Result.Success(collaborators);
         }
 
-        public async Task<Result> Update(CollaboratorViewModel dto)
+        public async Task<Result> Update(CollaboratorDTO dto)
         {
             var updateValue = _mapper.Map<Collaborator>(dto);
             var entity = await _context.Collaborators.SingleOrDefaultAsync(p => p.Id == dto.Id);

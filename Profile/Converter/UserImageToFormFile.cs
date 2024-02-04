@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BookingApp.Entities.Base;
+using BookingApp.Common.Entities.Base;
 
 namespace BookingApp.Profile.Converter
 {

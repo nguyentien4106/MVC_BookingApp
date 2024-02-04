@@ -1,8 +1,8 @@
-﻿using BookingApp.Common.Services;
+﻿using BookingApp.Common.Model.Result;
+using BookingApp.Common.Services;
 using BookingApp.Models;
-using BookingApp.Models.DTO.Home;
-using BookingApp.Models.Result;
 using BookingApp.Services;
+using BookingApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -47,7 +47,7 @@ namespace BookingApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Filters([FromBody] FilterModel model)
+        public async Task<IActionResult> Filters([FromBody] FilterViewModel model)
         {
             if(model == null)
             {

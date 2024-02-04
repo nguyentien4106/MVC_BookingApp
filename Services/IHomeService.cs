@@ -1,6 +1,6 @@
-﻿using BookingApp.Models.DTO.Home;
-using BookingApp.Models.Result;
-using BookingApp.Models.ViewModel;
+﻿using BookingApp.Common.Model.Result;
+using BookingApp.ViewModels;
+
 
 namespace BookingApp.Services
 {
@@ -10,6 +10,6 @@ namespace BookingApp.Services
 
         Task<MemoryStream> GetAvatar();
 
-        Task<Result> Filters(FilterModel model);
+        Task<Result> Filters(FilterViewModel model);
     }
 }

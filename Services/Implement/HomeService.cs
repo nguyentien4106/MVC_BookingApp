@@ -1,11 +1,10 @@
-﻿using BookingApp.Data;
-using BookingApp.Entities;
-using BookingApp.Models.DTO.Home;
+﻿using BookingApp.Common.Data;
+using BookingApp.Common.Entities;
+using BookingApp.Common.Model.Result;
+using BookingApp.Common.Services;
 using BookingApp.Models.Enum;
-using BookingApp.Models.Result;
+using BookingApp.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing;
-
 namespace BookingApp.Services.Implement
 {
     public class HomeService : IHomeService
@@ -19,7 +18,7 @@ namespace BookingApp.Services.Implement
             _imageService = imageService;
         }
 
-        public async Task<Result> Filters(FilterModel model)
+        public async Task<Result> Filters(FilterViewModel model)
         {
             var collaborators = await _context.Collaborators.Include(item => item.BookingInformation)
                 .ThenInclude(item => item.CollaboratorServices)
@@ -32,13 +31,13 @@ namespace BookingApp.Services.Implement
             return Result.Success(filterByAddress);
         }
 
-        private static bool FilterByAge(FilterModel model, Collaborator item)
+        private static bool FilterByAge(FilterViewModel model, Collaborator item)
         {
             var age = DateTime.Now.Year - item.BirthDate?.Year;
             return age > model.FromAge && age < model.ToAge;
         }
 
-        private static bool FilterByAddress(FilterModel model, Collaborator item)
+        private static bool FilterByAddress(FilterViewModel model, Collaborator item)
         {
             if (model.ProvinceName == "All") return true;
 
